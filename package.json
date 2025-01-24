@@ -8,7 +8,7 @@
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "fix": "eslint . --fix",
     "prepare": "husky install",
     "lint:lint-staged": "lint-staged",
     "test": "vitest"
@@ -18,6 +18,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
+    "@tailwindcss/vite": "^4.0.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.7.0",
@@ -28,11 +29,15 @@
     "jsdom": "^26.0.0",
     "lint-staged": "^15.4.1",
     "path": "^0.12.7",
+    "tailwindcss": "^4.0.0",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.21.0",
     "vite": "^6.0.5",
     "vite-plugin-svg-icons": "^2.0.1",
     "vitest": "^3.0.3",
     "vue-tsc": "^2.2.0"
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx,vue}": [ "eslint --fix" ]
   }
 }

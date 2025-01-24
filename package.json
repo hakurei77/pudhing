@@ -11,7 +11,7 @@
     "fix": "eslint . --fix",
     "prepare": "husky",
     "lint:lint-staged": "lint-staged",
-    "test": "vitest"
+    "test": "vitest --run"
   },
   "dependencies": {
     "vue": "^3.5.13"

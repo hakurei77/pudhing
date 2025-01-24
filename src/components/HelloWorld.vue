@@ -1,5 +1,5 @@
 <template>
-    <div>你</div>
+    <div>你好</div>
 </template>
 
 <script setup lang="ts">

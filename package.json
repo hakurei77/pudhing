@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "fix": "eslint . --fix",
-    "prepare": "husky install",
+    "prepare": "husky",
     "lint:lint-staged": "lint-staged",
     "test": "vitest"
   },
@@ -25,7 +25,7 @@
     "eslint": "^9.18.0",
     "eslint-plugin-vue": "^9.32.0",
     "globals": "^15.14.0",
-    "husky": "^8.0.0",
+    "husky": "^9.1.7",
     "jsdom": "^26.0.0",
     "lint-staged": "^15.4.1",
     "path": "^0.12.7",
@@ -38,6 +38,8 @@
     "vue-tsc": "^2.2.0"
   },
   "lint-staged": {
-    "*.{js,ts,jsx,tsx,vue}": [ "eslint --fix" ]
+    "*.{js,ts,jsx,tsx,vue}": [
+      "eslint --fix"
+    ]
   }
 }

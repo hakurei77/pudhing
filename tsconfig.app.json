@@ -13,7 +13,6 @@
     "paths":{    //路径映射，相对于baseUrl
       "@/*" :["./src/*"]
     }
-
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"]
 }

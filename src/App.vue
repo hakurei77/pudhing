@@ -1,9 +1,9 @@
 <template>
-    <HelloWorld />
+    <LLMLayout />
 </template>
 
 <script setup lang="ts">
-import HelloWorld from "@/components/HelloWorld.vue";
+import LLMLayout from "@/components/LLMLayout.vue";
 </script>
 
 <style scoped>

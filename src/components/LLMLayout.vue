@@ -1,11 +1,11 @@
 <template>
-    <div class="flex w-full h-screen">
-        <LLMHeader />
+    <div class="flex flex-col items-center w-full h-[1000px] bg-amber-400 p-6">
+        <CharacterIntroduction />
     </div>
 </template>
 
 <script setup lang="ts">
-import LLMHeader from './LLMHeader.vue';
+import CharacterIntroduction from './CharacterIntroduction.vue';
 </script>
 
 <style scoped>

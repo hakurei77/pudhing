@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>豆包大模型调用</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        #response {
+            margin-top: 20px;   
+            border: 1px solid #ccc; 
+            padding: 10px; 
+            border-radius: 4px;
+            background-color: #f8f9fa; 
+            white-space: pre-wrap; 
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>豆包大模型调用</h1>
+    <textarea id="userMessage" rows="4" placeholder="输入你的消息..."></textarea>
+    <button id="sendMessage">发送消息</button>
+
+    <div id="response"></div>
+    <div id="history"
+        style="margin-top: 20px; border: 1px solid #ccc; padding: 10px; border-radius: 4px; background-color: #f8f9fa;">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        let messageHistory = [];
+
+        document.getElementById('sendMessage').addEventListener('click', async function () {
+            const userMessage = document.getElementById('userMessage').value;
+            messageHistory.push({ role: 'user', content: userMessage });
+            updateHistory();
+
+            const response = await fetch('http://localhost:3000/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userMessage: userMessage })
+            });
+
+            const reader = response.body.getReader();
+            const textDecoder = new TextDecoder();
+            let fullResponse = ''; // 用于拼接完整的响应文本
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) {
+                    break;
+                }
+                const str = textDecoder.decode(value);
+                const events = str.split('\n\n'); // 将数据分割成多个事件
+                events.forEach(event => {
+                    if (event.trim().startsWith('data: ')) {
+                        const jsonDataString = event.trim().substring(6); // 去掉 'data: ' 前缀
+                        try {
+                            const jsonData = JSON.parse(jsonDataString);
+                            fullResponse += jsonData.content; // 拼接内容
+                            document.getElementById('response').innerHTML =  marked.parse(fullResponse); // 实时更新显示
+                        } catch (e) {
+                            console.error('JSON parse error:', e);
+                        }
+                    }
+                });
+            }
+        });
+
+        function updateHistory() {
+            const historyDiv = document.getElementById('history');
+            historyDiv.innerHTML = messageHistory.map(msg => `<div><strong>${msg.role}:</strong> ${msg.content}</div>`).join('');
+        }
+    </script>
+
+</body>
+
+</html>

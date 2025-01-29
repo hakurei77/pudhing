@@ -73,8 +73,7 @@ createApp(App).use(globalComponent).mount('#app');
 ### 可传参数
 
 - name[必传]:    svg 文件名
-- width:    px...
-- height:   px...
+- scale:    number
 - color:    #000...
 - prefix:    前缀，默认为 `#icon-`，可自定义
 

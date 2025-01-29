@@ -12,8 +12,8 @@ const props = withDefaults(defineProps<{
     src: string;
 }>(),{});
 
+const baseSize = 10; // 基础大小
 const scaledSize = computed(() => {
-    const baseSize = 10; // 基础大小
     return baseSize * props.scale;
 });
 </script>

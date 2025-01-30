@@ -1,38 +1,29 @@
 <template>
-    <!-- <div class="fixed flex items-center justify-center bottom-0 w-full h-[70px] bg-red-300 border-t-[1px] border-solid border-[#e4e7e7] p-2.5 cursor-text">
-        <div class="relative w-full h-full bg-[#f7f7f7] rounded-full flex items-center p-3">
-            <div class="w-[30px] h-[30px] rounded-full flex items-center justify-center hover:bg-[#f1f2f2] cursor-pointer">
-                <SvgIcon name="plus" :scale="1.5" />
-            </div>
-            <span class="text-[#8d9696] ml-4">输入信息...</span>
-            <div class="absolute right-0 mr-3 w-[30px] h-[30px] rounded-full flex items-center justify-center">
-                <SvgIcon name="arrow-right" color="#8d9696" :scale="1.5" />
-            </div>
-        </div>
-    </div> -->
-    <div class="fixed bottom-0 w-full border-t-[1px] border-[var(--divided-line)] p-2.5">
-        <div class="bg-[var(--background-gray)] rounded-xl p-3 shadow-sm transition-all duration-300  focus-within:ring-2 focus-within:ring-[var(--primary-color)]">
+    <div class="w-full p-2.5 cursor-text" @click="focusTextarea">
+        <div class="bg-[var(--background-gray)] rounded-xl p-3 shadow-sm transition-all duration-300 
+                    focus-within:ring-2 focus-within:ring-[var(--primary-color)]">
             <div class="pl-1.5 pr-1.5">
-                <textarea rows="1" placeholder="输入信息..."
-                          class="w-full resize-none bg-transparent outline-none placeholder-[var(--background-text-gray)] text-sm overflow-hidden"
-                          style="max-height: 400px; overflow-y: auto;"
-                          oninput="this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 400) + 'px'" />
-                <div v-if="attachments.length > 0" class="flex pt-[16px] overflow-x-auto">
+                <textarea ref="textarea" rows="1" placeholder="输入信息..." class="w-full mt-[4px] max-h-[350px] overflow-y-auto resize-none bg-transparent outline-none placeholder-[var(--background-text-gray)] text-sm"
+                          oninput="this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 350) + 'px'" v-model="textareaContent"/>
+                <div v-if="attachments.length > 0" class="flex pt-[16px] overflow-x-auto scroll-smooth"
+                     @wheel="handleHorizontalScroll">
                     <template v-for="(attachment, index) in attachments" :key="index">
-                        <div v-if="attachment.type === 'image'" class="w-[64px] h-[64px] relative rounded-xl mr-2 flex-shrink-0">
-                            <img :src="attachment.preview" class="w-full h-full object-cover rounded-xl" alt="Preview" >
+                        <div v-if="attachment.type === 'image'"
+                             class="w-[64px] h-[64px] relative rounded-xl mr-2 flex-shrink-0">
+                            <img :src="attachment.preview" class="w-full h-full object-cover rounded-xl">
                             <div class="w-[24px] h-[24px] rounded-full absolute top-[-12px] right-[-12px] bg-white flex items-center justify-center cursor-pointer"
                                  @click="removeAttachment(index)">
                                 <SvgIcon name="x" />
                             </div>
                         </div>
-                        <div v-else class="h-[64px] border-solid border-[1px] border-[var(--divided-line)] relative rounded-xl mr-2 flex items-center p-3 flex-shrink-0">
-                            <div class="w-[24px] h-[24px] flex items-center justify-center mr-2">
+                        <div v-else
+                             class="h-[64px] relative mr-2 p-3 rounded-xl flex items-center border-solid border-[1px] border-[var(--divided-line)] flex-shrink-0">
+                            <div class="w-[24px] h-[24px] mr-2 flex items-center justify-center">
                                 <SvgIcon name="file" :scale="1.5" />
                             </div>
                             <div class="flex flex-col">
                                 <span>{{ attachment.name }}</span>
-                                <span class="text-sm text-[var(--background-text-gray)]">文件 · {{ attachment.name }}</span>
+                                <span class="text-sm text-[var(--background-text-gray)]">文件 · {{ attachment.size }}</span>
                             </div>
                             <div class="w-[24px] h-[24px] rounded-full absolute top-[-12px] right-[-12px] bg-white flex items-center justify-center cursor-pointer"
                                  @click="removeAttachment(index)">
@@ -44,58 +35,84 @@
             </div>
             <div class="flex relative mt-[4px]">
                 <div class="group relative">
-                    <div
-                        class="w-[30px] h-[30px] rounded-full flex items-center justify-center hover:bg-[var(--hover-gray)] cursor-pointer"
-                        @click="openFilePicker">
+                    <div class="w-[30px] h-[30px] rounded-full flex items-center justify-center hover:bg-[var(--hover-gray)] cursor-pointer"
+                         @click="openFilePicker">
                         <SvgIcon name="plus" :scale="1.5" />
                     </div>
-                    <span class="absolute bottom-[120%] left-1/2 -translate-x-1/2 mb-1 px-3 py-2 text-xs text-white bg-black rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap
+                    <span
+                        class="absolute bottom-[120%] left-1/2 -translate-x-1/2 mb-1 px-3 py-2 text-xs text-white bg-black rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap
                                  after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-8 after:border-t-black after:border-x-transparent after:border-b-transparent">
                         选择附件
                     </span>
+                    <input ref="fileInput" type="file" hidden accept="image/*, 
+                                                                .pdf, application/pdf, 
+                                                                .doc, .docx, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document,
+                                                                .xls, .xlsx, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+                                                                .md, text/markdown, text/plain" @change="handleFileSelect">
                 </div>
                 <div class="flex items-center absolute right-0">
                     <span class="text-xs text-[var(--background-text-gray)] mr-2">Enter 发送 · Ctrl+Enter 换行</span>
-                    <div class="w-[30px] h-[30px] rounded-full flex items-center justify-center">
-                        <SvgIcon name="arrow-right" color="#8d9696" :scale="1.5" />
+                    <div v-if="textareaContent.trim() !== '' || attachments.length > 0" class="w-[30px] h-[30px] rounded-full flex items-center justify-center bg-[var(--primary-color)] cursor-pointer" @click="handleSubmit">
+                        <SvgIcon name="arrow-right" color="white" :scale="1.5" />
+                    </div>
+                    <div v-else class="w-[30px] h-[30px] rounded-full flex items-center justify-center cursor-not-allowed">
+                        <SvgIcon name="arrow-right" color="var(--background-text-gray)" :scale="1.5" />
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <input 
-        type="file"
-        ref="fileInput"
-        multiple
-        class="hidden"
-        @change="handleFileSelect">
 </template>
 
 <script setup lang="ts">
 import { ref, onBeforeUnmount } from 'vue';
 
-interface Attachment {
-  file: File;
-  type: 'image' | 'file';
-  preview?: string;
-  name: string;
-  size: string;
-}
 
+interface Attachment {
+    file: File;
+    type: 'image' | 'file';
+    preview?: string;
+    name: string;
+    size: string;
+}
 const attachments = ref<Attachment[]>([]);
 const fileInput = ref<HTMLInputElement | null>(null);
+const textarea = ref<HTMLTextAreaElement | null>(null);
+const textareaContent = ref('');//文本信息
 
-// 打开文件选择
-const openFilePicker = () => {
-    fileInput.value?.click();
+
+// ======================
+// 页面交互
+// ======================
+//控制滚动条横向滑动
+const handleHorizontalScroll = (e: WheelEvent) => {
+    e.preventDefault();
+    const container = e.currentTarget as HTMLElement;
+    if (!(container instanceof HTMLElement)) return;
+    container.scrollLeft += e.deltaY;
+};
+//文本聚焦
+const focusTextarea = () => {
+    textarea.value?.focus();
 };
 
-// 处理文件选择
+// ======================
+// 主要逻辑
+// ======================
+// 打开文件
+const openFilePicker = () => {
+    fileInput.value?.click(); 
+};
+// 选择文件
 const handleFileSelect = (e: Event) => {
+    const MAX_FILE_SIZE = 5 * 1024 * 1024;
     const files = (e.target as HTMLInputElement).files;
     if (!files) return;
-
     Array.from(files).forEach(file => {
+        if (file.size  > MAX_FILE_SIZE) {
+            alert(`文件 ${file.name}  太大了，最大支持 ${formatFileSize(MAX_FILE_SIZE)}！`);
+            return;
+        }
         const type = file.type.startsWith('image/') ? 'image' : 'file';
         const attachment: Attachment = {
             file,
@@ -103,23 +120,12 @@ const handleFileSelect = (e: Event) => {
             name: file.name,
             size: formatFileSize(file.size)
         };
-
         if (type === 'image') {
             attachment.preview = URL.createObjectURL(file);
         }
-
         attachments.value.push(attachment);
     });
 };
-
-// 删除附件
-const removeAttachment = (index: number) => {
-    const [removed] = attachments.value.splice(index, 1);
-    if (removed.preview) {
-        URL.revokeObjectURL(removed.preview);
-    }
-};
-
 // 格式化文件大小
 const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
@@ -128,7 +134,13 @@ const formatFileSize = (bytes: number) => {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
 };
-
+// 删除附件
+const removeAttachment = (index: number) => {
+    const [removed] = attachments.value.splice(index, 1);
+    if (removed.preview) {
+        URL.revokeObjectURL(removed.preview);
+    }
+};
 // 清理预览URL
 onBeforeUnmount(() => {
     attachments.value.forEach(attachment => {
@@ -137,7 +149,19 @@ onBeforeUnmount(() => {
         }
     });
 });
+const handleSubmit = async () => {
+    if (textareaContent.value.trim()  === '' && attachments.value.length  === 0) {
+        alert('请输入内容或上传附件');
+        return;
+    }
 
+    const formData = new FormData();
+    formData.append('content',  textareaContent.value); 
+    attachments.value.forEach(attachment  => {
+        formData.append('attachments',  attachment.file); 
+    });
+    //console.log('提交的数据:', formData);
+};
 </script>
 
 <style scoped></style>

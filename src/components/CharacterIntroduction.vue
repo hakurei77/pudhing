@@ -1,5 +1,5 @@
 <template>
-    <div class="w-[100%] rounded-[8px] bg-[var(--background-gray)] p-4">
+    <div class="w-[100%] rounded-[8px] bg-[var(--background-gray)] p-4 mb-2">
         <div class="flex items-center w-full">
             <ImgBox :src="imgSrc" :scale="5"/>
             <span class="ml-2 font-bold text-xl">小黑塔</span>

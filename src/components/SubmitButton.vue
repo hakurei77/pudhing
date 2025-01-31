@@ -44,7 +44,7 @@
                                  after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-8 after:border-t-black after:border-x-transparent after:border-b-transparent">
                         选择附件
                     </span>
-                    <input ref="fileInput" type="file" hidden accept="image/*, 
+                    <input ref="fileInput" type="file" hidden multiple accept="image/*, 
                                                                 .pdf, application/pdf, 
                                                                 .doc, .docx, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document,
                                                                 .xls, .xlsx, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
@@ -52,12 +52,19 @@
                 </div>
                 <div class="flex items-center absolute right-0">
                     <span class="text-xs text-[var(--background-text-gray)] mr-2">Enter 发送 · Ctrl+Enter 换行</span>
-                    <div v-if="textareaContent.trim() !== '' || attachments.length > 0" class="w-[30px] h-[30px] rounded-full flex items-center justify-center bg-[var(--primary-color)] cursor-pointer" @click="handleSubmit">
-                        <SvgIcon name="arrow-right" color="white" :scale="1.5" />
-                    </div>
-                    <div v-else class="w-[30px] h-[30px] rounded-full flex items-center justify-center cursor-not-allowed">
-                        <SvgIcon name="arrow-right" color="var(--background-text-gray)" :scale="1.5" />
-                    </div>
+                    <template v-if="isLoading">
+                        <div class="w-[30px] h-[30px] flex items-center justify-center">
+                            <div class="w-[70%] h-[70%] border-2 border-[var(--primary-color)] border-t-transparent rounded-full animate-spin"></div>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div v-if="textareaContent.trim() !== '' || attachments.length > 0" class="w-[30px] h-[30px] rounded-full flex items-center justify-center bg-[var(--primary-color)] cursor-pointer" @click="handleSubmit">
+                            <SvgIcon name="arrow-right" color="white" :scale="1.5" />
+                        </div>
+                        <div v-else class="w-[30px] h-[30px] rounded-full flex items-center justify-center cursor-not-allowed">
+                            <SvgIcon name="arrow-right" color="var(--background-text-gray)" :scale="1.5" />
+                        </div>
+                    </template>
                 </div>
             </div>
         </div>
@@ -66,21 +73,17 @@
 
 <script setup lang="ts">
 import { ref, onBeforeUnmount } from 'vue';
-
-
-interface Attachment {
+import { useFormDataStore } from "@/store/useFormDataStore";
+const formDataStore = useFormDataStore(); 
+interface Attachment {  // 附件类型
     file: File;
     type: 'image' | 'file';
-    preview?: string;
     name: string;
     size: string;
+    preview?: string;
 }
-const attachments = ref<Attachment[]>([]);
-const fileInput = ref<HTMLInputElement | null>(null);
-const textarea = ref<HTMLTextAreaElement | null>(null);
-const textareaContent = ref('');//文本信息
-
-
+const attachments = ref<Attachment[]>([]);  // 附件列表
+const textareaContent = ref('');        //文本信息
 // ======================
 // 页面交互
 // ======================
@@ -92,25 +95,26 @@ const handleHorizontalScroll = (e: WheelEvent) => {
     container.scrollLeft += e.deltaY;
 };
 //文本聚焦
+const textarea = ref<HTMLTextAreaElement | null>(null); //文本域，用来控制输入框聚焦
 const focusTextarea = () => {
     textarea.value?.focus();
 };
-
-// ======================
-// 主要逻辑
-// ======================
 // 打开文件
+const fileInput = ref<HTMLInputElement | null>(null);   //文件选择器（支持多选）
 const openFilePicker = () => {
     fileInput.value?.click(); 
 };
+// ======================
+// 主要逻辑
+// ======================
 // 选择文件
 const handleFileSelect = (e: Event) => {
-    const MAX_FILE_SIZE = 5 * 1024 * 1024;
+    const MAX_FILE_SIZE = 5 * 1024 * 1024;  //最大文件大小
     const files = (e.target as HTMLInputElement).files;
     if (!files) return;
     Array.from(files).forEach(file => {
         if (file.size  > MAX_FILE_SIZE) {
-            alert(`文件 ${file.name}  太大了，最大支持 ${formatFileSize(MAX_FILE_SIZE)}！`);
+            alert(`文件 ${file.name}  太大了，最大支持 ${formatFileSize(MAX_FILE_SIZE)}!`);
             return;
         }
         const type = file.type.startsWith('image/') ? 'image' : 'file';
@@ -149,19 +153,21 @@ onBeforeUnmount(() => {
         }
     });
 });
-const handleSubmit = async () => {
-    if (textareaContent.value.trim()  === '' && attachments.value.length  === 0) {
-        alert('请输入内容或上传附件');
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append('content',  textareaContent.value); 
-    attachments.value.forEach(attachment  => {
-        formData.append('attachments',  attachment.file); 
-    });
-    //console.log('提交的数据:', formData);
+// 修改后的提交处理
+const isLoading = ref(false); // 加载状态
+const handleSubmit = () => {
+    isLoading.value = true;
+    formDataStore.value = {
+        text: textareaContent.value,
+        file: attachments.value
+    };
+    isLoading.value = false;
+    dataInit();
+    //console.log(formDataStore.value);
+};
+const dataInit = () => {
+    textareaContent.value = '';
+    attachments.value = [];
 };
 </script>
-
 <style scoped></style>

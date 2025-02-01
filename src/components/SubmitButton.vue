@@ -4,7 +4,7 @@
                     focus-within:ring-2 focus-within:ring-[var(--primary-color)]">
             <div class="pl-1.5 pr-1.5">
                 <textarea ref="textarea" rows="1" placeholder="输入信息..." class="w-full mt-[4px] max-h-[350px] overflow-y-auto resize-none bg-transparent outline-none placeholder-[var(--background-text-gray)] text-sm"
-                          oninput="this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 350) + 'px'" v-model="textareaContent"/>
+                          v-model="textareaContent" @input="handleTextareaInput" @keydown.enter="handleKeydown"/>
                 <div v-if="attachments.length > 0" class="flex pt-[16px] overflow-x-auto scroll-smooth"
                      @wheel="handleHorizontalScroll">
                     <template v-for="(attachment, index) in attachments" :key="index">
@@ -44,11 +44,7 @@
                                  after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-8 after:border-t-black after:border-x-transparent after:border-b-transparent">
                         选择附件
                     </span>
-                    <input ref="fileInput" type="file" hidden multiple accept="image/*, 
-                                                                .pdf, application/pdf, 
-                                                                .doc, .docx, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document,
-                                                                .xls, .xlsx, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
-                                                                .md, text/markdown, text/plain" @change="handleFileSelect">
+                    <input ref="fileInput" type="file" hidden multiple accept=".png , .jepg , .jpg , .webp" @change="handleFileSelect">
                 </div>
                 <div class="flex items-center absolute right-0">
                     <span class="text-xs text-[var(--background-text-gray)] mr-2">Enter 发送 · Ctrl+Enter 换行</span>
@@ -72,14 +68,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeUnmount } from 'vue';
+import { ref, onBeforeUnmount , nextTick } from 'vue';
 import { useFormDataStore } from "@/store/useFormDataStore";
+import { sendFormDataApi } from '@/api/data';
 const formDataStore = useFormDataStore(); 
 interface Attachment {  // 附件类型
     file: File;
     type: 'image' | 'file';
     name: string;
     size: string;
+    base64: string;
     preview?: string;
 }
 const attachments = ref<Attachment[]>([]);  // 附件列表
@@ -99,35 +97,71 @@ const textarea = ref<HTMLTextAreaElement | null>(null); //文本域，用来控�
 const focusTextarea = () => {
     textarea.value?.focus();
 };
+// 文本域高度自适应
+const handleTextareaInput = () => {
+    if (!textarea.value) return;
+    textarea.value.style.height = 'auto';
+    const newHeight = Math.min(textarea.value.scrollHeight, 350);
+    textarea.value.style.height = `${newHeight}px`;
+};
 // 打开文件
 const fileInput = ref<HTMLInputElement | null>(null);   //文件选择器（支持多选）
 const openFilePicker = () => {
     fileInput.value?.click(); 
 };
+//键盘换行控制
+const handleKeydown = (e: KeyboardEvent) => {
+    if (e.key === 'Enter') {
+        // 处理 Ctrl+Enter 或 Cmd+Enter（Mac）
+        if (e.ctrlKey || e.metaKey) {
+            // 手动插入换行并更新内容
+            const textarea = e.target as HTMLTextAreaElement;
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            textareaContent.value = textareaContent.value.substring(0, start) + '\n' + textareaContent.value.substring(end);
+            // 更新光标位置
+            nextTick(() => {
+                textarea.selectionStart = textarea.selectionEnd = start + 1;
+                handleTextareaInput();  // 触发高度调整
+            });
+        } else {
+            e.preventDefault();
+            if (textareaContent.value.trim() !== '' || attachments.value.length > 0) {
+                handleSubmit();
+            }
+        }
+    }
+};
 // ======================
 // 主要逻辑
 // ======================
 // 选择文件
-const handleFileSelect = (e: Event) => {
-    const MAX_FILE_SIZE = 5 * 1024 * 1024;  //最大文件大小
-    const files = (e.target as HTMLInputElement).files;
+const handleFileSelect = async (e: Event) => {
+    const MAX_FILE_SIZE = 5 * 1024 * 1024;
+    const files = (e.target  as HTMLInputElement).files;
     if (!files) return;
-    Array.from(files).forEach(file => {
+    Array.from(files).forEach(async  (file) => {
         if (file.size  > MAX_FILE_SIZE) {
             alert(`文件 ${file.name}  太大了，最大支持 ${formatFileSize(MAX_FILE_SIZE)}!`);
             return;
         }
-        const type = file.type.startsWith('image/') ? 'image' : 'file';
-        const attachment: Attachment = {
-            file,
-            type,
-            name: file.name,
-            size: formatFileSize(file.size)
-        };
-        if (type === 'image') {
-            attachment.preview = URL.createObjectURL(file);
+        try {
+            const base64 = await converTtoBase64(file);
+            const type = file.type.startsWith('image/')  ? 'image' : 'file';
+            const attachment: Attachment = {
+                file,
+                type,
+                name: file.name, 
+                size: formatFileSize(file.size), 
+                base64: base64 
+            };
+            if (type === 'image') {
+                attachment.preview  = URL.createObjectURL(file); 
+            }
+            attachments.value.push(attachment); 
+        } catch (error) {
+            alert('Error  converting file:' + error);
         }
-        attachments.value.push(attachment);
     });
 };
 // 格式化文件大小
@@ -137,6 +171,24 @@ const formatFileSize = (bytes: number) => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+};
+// 将文件转换为base64
+const converTtoBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+            const base64 = reader.result as string;
+            if (base64) {
+                resolve(base64);
+            } else {
+                reject(new Error('Failed to convert file to base64'));
+            }
+        };
+        reader.onerror = () => {
+            reject(new Error('Failed to convert file to base64'));
+        };
+    });
 };
 // 删除附件
 const removeAttachment = (index: number) => {
@@ -155,17 +207,31 @@ onBeforeUnmount(() => {
 });
 // 修改后的提交处理
 const isLoading = ref(false); // 加载状态
-const handleSubmit = () => {
+const handleSubmit = async () => {
+    if (textareaContent.value.trim() === '' && attachments.value.length === 0) {
+        alert('不可提交空内容');
+        return;
+    }
     isLoading.value = true;
     formDataStore.value = {
         text: textareaContent.value,
         file: attachments.value
     };
-    isLoading.value = false;
+    formDataStore.changeDataFormat();
     dataInit();
-    //console.log(formDataStore.value);
+    isLoading.value = false;
+    const sendData = JSON.parse(JSON.stringify(formDataStore.submitData));
+    sendFormDataApi(sendData);
+
 };
+// ======================
+// 全局逻辑
+// ======================
+//  表单数据重置
 const dataInit = () => {
+    if(textarea.value){
+        textarea.value.style.height = 'auto';
+    }
     textareaContent.value = '';
     attachments.value = [];
 };

@@ -7,10 +7,18 @@ import pluginVue from "eslint-plugin-vue"; // 导入 Vue ESLint 插件
 export default [
     {
         // 适用于所有 JavaScript、TypeScript 和 Vue 文件
-        files: ["**/*.{js,mjs,cjs,ts,vue}"],
+        files: ["**/*.{ts,vue}"],
         rules: { 
             indent: ["error", 4], // 全局缩进设置为 4 个空格
             "no-console": ["error"], // 禁止使用 console 语句
+            "semi": ["error", "always"], // 强制语句结尾使用分号
+        } 
+    },
+    {
+        // 适用于所有 JavaScript、TypeScript 和 Vue 文件
+        files: ["**/*.{js}"],
+        rules: { 
+            indent: ["error", 4], // 全局缩进设置为 4 个空格
             "semi": ["error", "always"], // 强制语句结尾使用分号
         } 
     },

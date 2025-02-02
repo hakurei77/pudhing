@@ -33,25 +33,6 @@ export const useFormDataStore = defineStore('form-data', {
     actions: {
         /**
          * 此函数用来修改表单数据格式
-         * 当前大模型api仅支持图片传输
-         * 传递数据格式：[
-         *   {
-         *       "type": "text",
-         *       "text": ""
-         *   },
-         *   {
-         *       "type": "image_url",
-         *       "image_url": {
-         *           "url": "",
-         *       }，
-         *   }，
-         *   {
-         *       "type": "image_url",
-         *       "image_url": {
-         *           "url": "",
-         *       }，
-         *   }
-         *]
         */
         changeDataFormat() {
             this.submitData = [];

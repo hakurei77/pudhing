@@ -1,3 +1,4 @@
+import { useDataListStore } from "@/store/dataList";
 // 定义文本类型的类型别名
 type TextItem = {
     type: 'text';
@@ -12,8 +13,12 @@ type ImageItem = {
 };
 // 定义整个数据格式的类型别名
 type DataFormat = TextItem | ImageItem ;
-const sendFormData = async (url: string , data: DataFormat) => {
+const sendFormData = async (url: string , data: DataFormat[]) => {
     try {
+        const dataListStore = useDataListStore();
+        //当数据发送时(将数据存入dataListStore)
+        dataListStore.addUserData(data);
+        dataListStore.addSystemList();
         // 发送 POST 请求到后端
         const response = await fetch(url, {
             method: 'POST',
@@ -32,8 +37,8 @@ const sendFormData = async (url: string , data: DataFormat) => {
             if (done) {
                 break;
             }
-            const a = textDecoder.decode(value);
-            alert(a);
+            const response = textDecoder.decode(value);
+            dataListStore.addSystemData(response);
         }
     } catch (error) {
         alert('提交失败，请稍后再试' + error);

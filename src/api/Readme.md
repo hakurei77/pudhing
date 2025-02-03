@@ -13,13 +13,13 @@
         "type": "image_url",
         "image_url": {
             "url": "",  //base64编码的图片
-        }，
-    }，
+        },
+    },
     {
         "type": "image_url",
         "image_url": {
             "url": "",  
-        }，
+        },
     }
 ]
 ```

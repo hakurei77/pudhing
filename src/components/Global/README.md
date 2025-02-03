@@ -9,7 +9,7 @@
 
 # 全局组件及使用方法
 
-## SvgIcon（svg组件）
+## SvgIcon (svg组件)
 
 ### 配置
 

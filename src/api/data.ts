@@ -14,7 +14,7 @@ type ImageItem = {
 };
 // 定义整个数据格式的类型别名
 type DataFormat = TextItem | ImageItem ;
-const sendFormDataApi = async (data: DataFormat) => {
+const sendFormDataApi = async (data: DataFormat[]) => {
     return await sendFormData("http://localhost:3000/api/getFormData", data);
 };
 

@@ -205,7 +205,10 @@ onBeforeUnmount(() => {
         }
     });
 });
-// 修改后的提交处理
+// ======================
+// 核心逻辑
+// ======================
+// 提交表单
 const isLoading = ref(false); // 加载状态
 const handleSubmit = async () => {
     if (textareaContent.value.trim() === '' && attachments.value.length === 0) {
@@ -219,10 +222,9 @@ const handleSubmit = async () => {
     };
     formDataStore.changeDataFormat();
     dataInit();
-    isLoading.value = false;
     const sendData = JSON.parse(JSON.stringify(formDataStore.submitData));
     sendFormDataApi(sendData);
-
+    isLoading.value = false;
 };
 // ======================
 // 全局逻辑

@@ -1,4 +1,21 @@
 import { defineStore } from 'pinia';
+
+type User = {
+    type: 'text';
+    text: string;
+};
+type Assistant = {
+    type: 'image_url';
+    image_url: {
+        url: string;
+    };
+};
+type List = User | Assistant ;
+type DataList = {
+    role: string;
+    content: List[];
+}
+//数据格式
 // [
 //     {
 //         role:"user",
@@ -11,12 +28,6 @@ import { defineStore } from 'pinia';
 //                 "type": "image_url",
 //                 "image_url": {
 //                     "url": "",  //base64编码的图片
-//                 },
-//             },
-//             {
-//                 "type": "image_url",
-//                 "image_url": {
-//                     "url": "",  
 //                 },
 //             }
 //         ]
@@ -34,30 +45,9 @@ import { defineStore } from 'pinia';
 //                     "url": "",  //base64编码的图片
 //                 },
 //             },
-//             {
-//                 "type": "image_url",
-//                 "image_url": {
-//                     "url": "",  
-//                 },
-//             }
 //         ]
 //     }
 // ]
-type User = {
-    type: 'text';
-    text: string;
-};
-type Assistant = {
-    type: 'image_url';
-    image_url: {
-        url: string;
-    };
-};
-type List = User | Assistant ;
-type DataList = {
-    role: string;
-    content: List[];
-}
 export const useDataListStore = defineStore('data-list', {
     state: () => ({
         dataList: [] as DataList[],

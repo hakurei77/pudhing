@@ -13,6 +13,7 @@ const API_URL = "https://ark.cn-beijing.volces.com/api/v3/chat/completions";
 let messageHistory = [];
 // 记录用户消息
 const logUserMessage = (userMessage) => {
+    messageHistory = [];
     messageHistory.push({  role: 'user', content: userMessage });
 };
 // 生成聊天请求数据
@@ -32,6 +33,7 @@ app.post('/api/getFormData',  async (req, res) => {
     const userMessage = req.body; 
     const data = createChatRequestData(userMessage);
     try {
+        console.log(messageHistory);
         const response = await fetch(API_URL, {
             method: 'POST',
             headers: {

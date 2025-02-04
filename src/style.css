@@ -8,4 +8,6 @@
     --background-text-gray: #99a1af; /* 背景文字色 */
     --divided-line: #e4e7e7; /* 分割线 */
     --hover-gray: #f1f2f2; /* 悬浮灰色 */
+    --succeed-color: #67c23a;
+    --error-color: #f56c6c;
 }

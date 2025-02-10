@@ -18,14 +18,11 @@
 <script setup lang="ts">
 import imgScr from "@/assets/imgs/xiaoheita.png";
 import pudhing from "@/assets/imgs/pudhing.png";
-
 withDefaults(defineProps<{
     type?: string
 }>(), {
     type: "header"
 });
-
-
 
 const emit = defineEmits(['updateData']);
 const sendData = () => {

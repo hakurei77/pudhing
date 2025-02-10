@@ -1,7 +1,7 @@
 <template>
     <template v-if="type === 'header'">
         <div v-bind="$attrs" class="flex bg-[var(--background-gray)] w-full h-[50px] items-center border-b-[1px] border-solid border-[var(--divided-line)]">
-            <SvgIcon name="list" :scale="1.5" class="ml-5 cursor-pointer" @click="sendData" />
+            <SvgIcon name="list" :scale="1.5" class="ml-5 cursor-pointer lg:hidden" @click="sendData" />
             <ImgBox :scale="3.5" :src="imgScr" class="ml-5" />
             <span class="ml-2 font-bold">小黑塔助手</span>
         </div>

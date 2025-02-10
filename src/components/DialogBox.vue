@@ -8,7 +8,7 @@
                     <div class="p-3 w-full border-[2px] border-[#6db5c1] border-dotted rounded-xl min-h-[70px]">
                         <template v-for="(i, _) in item.content" :key="_">
                             <template v-if="i.type === 'text'">
-                                <span class="break-words">{{ i.text }}</span>
+                                <span class="break-all whitespace-break-spaces">{{ i.text }}</span>
                             </template>
                         </template>
                     </div>
@@ -24,7 +24,7 @@
                     <div class="bg-[var(--background-gray)] rounded-xl p-4 mt-2">
                         <template v-for="(i, _) in item.content" :key="_">
                             <template v-if="i.type === 'text'">
-                                <MarkdownParser :data="i.text" />
+                                <MarkdownParser class="break-all" :data="i.text" />
                             </template>
                         </template>
                     </div>

@@ -78,4 +78,5 @@ export const useDataListStore = defineStore('data-list', {
             });
         }
     },
+    persist: true,
 });

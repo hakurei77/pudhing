@@ -1,6 +1,6 @@
 <template>
-    <div class="w-full p-2.5 cursor-text" @click="focusTextarea">
-        <div class="bg-[var(--background-gray)] rounded-xl p-3 shadow-sm transition-all duration-300 
+    <div class="w-full pt-2.5 pb-2.5 pr-6 pl-6 cursor-text items-center justify-center flex" @click="focusTextarea">
+        <div class="max-w-[800px] flex-1 bg-[var(--background-gray)] rounded-xl p-3 shadow-sm transition-all duration-300 
                     focus-within:ring-2 focus-within:ring-[var(--primary-color)]">
             <div class="pl-1.5 pr-1.5">
                 <textarea ref="textarea" rows="1" placeholder="输入信息..." class="w-full mt-[4px] max-h-[350px] overflow-y-auto resize-none bg-transparent outline-none placeholder-[var(--background-text-gray)] text-sm"
@@ -109,6 +109,11 @@ const fileInput = ref<HTMLInputElement | null>(null);   //文件选择器（支�
 const openFilePicker = () => {
     fileInput.value?.click(); 
 };
+//控制滚动条滑动
+const props = defineProps(['sendScrollToBottom']);
+const ScrollToBottom = () => {
+    props.sendScrollToBottom(); 
+};
 //键盘换行控制
 const handleKeydown = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -128,6 +133,7 @@ const handleKeydown = (e: KeyboardEvent) => {
             e.preventDefault();
             if (textareaContent.value.trim() !== '' || attachments.value.length > 0) {
                 handleSubmit();
+                ScrollToBottom();
             }
         }
     }

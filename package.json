@@ -12,13 +12,13 @@
     "prepare": "husky",
     "lint:lint-staged": "lint-staged",
     "test": "vitest --run",
-    "total": "concurrently \"pnpm dev --open\" \"node server/index.js\""
+    "total": "concurrently \"pnpm dev\" \"pnpm --filter server dev\""
   },
   "dependencies": {
-    "axios": "^1.7.9",
     "highlight.js": "^11.11.1",
     "markdown-it": "^14.1.0",
     "pinia": "^2.3.1",
+    "pinia-plugin-persistedstate": "^4.2.0",
     "vue": "^3.5.13"
   },
   "devDependencies": {

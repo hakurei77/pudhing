@@ -11,7 +11,7 @@ let TOKEN = '';
 let MODEL = '';
 let API_URL = '';
 //1为豆包大模型 ， 2为deepseek
-let modelChange = 1;
+let modelChange = 2;
 if(modelChange === 1){
     TOKEN = "3905579d-60fd-43e1-8e8f-c5fb4cf7d96d";
     MODEL = "ep-20250205141832-bfs5p";
@@ -19,7 +19,7 @@ if(modelChange === 1){
 }
 if(modelChange === 2){
     TOKEN = "sk-631249bdf22f48a5a4c3efb9664bddfc"
-    MODEL = "deepseek-reasoner"; //deepseek-chat //deepseek-reasoner
+    MODEL = "deepseek-chat"; //deepseek-chat //deepseek-reasoner
     API_URL = "https://api.deepseek.com";
 }
 // 用户历史信息

@@ -4,6 +4,20 @@ export const constantRoute = [
         path:'/',
         component:() => import('@/components/LLMLayout.vue'),
         name:'layout',
+        children: [
+            {
+                path: '',
+                redirect: 'main', // 默认重定向到 main
+            },
+            {
+                path: 'chat',
+                component: () => import('@/components/MainChatPage.vue'),
+            },
+            {
+                path: 'main',
+                component: () => import('@/components/MainLayout.vue'),
+            },
+        ],
     },
     {
         path:'/404',

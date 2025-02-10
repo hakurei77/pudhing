@@ -15,9 +15,9 @@
 <script setup lang="ts">
 import { ref , nextTick , onMounted } from 'vue';
 import LLMHeader from './LLMHeader.vue';
-import CharacterIntroduction from './CharacterIntroduction.vue';
-import DialogBox from './DialogBox.vue';
-import SubmitButton from './SubmitButton.vue';
+import CharacterIntroduction from './MainCharacterIntroduction.vue';
+import DialogBox from './MainDialogBox.vue';
+import SubmitButton from './MainSubmitButton.vue';
 import SidebarLayout from './SidebarLayout.vue';
 const SidebarIsOpen = ref(false);
 const handleSidebarClose = () => {

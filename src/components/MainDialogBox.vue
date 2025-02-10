@@ -38,7 +38,7 @@
 import miku from "@/assets/imgs/miku.png";
 import mikulogo from "@/assets/imgs/mikulogo.png";
 import imgScr from "@/assets/imgs/xiaoheita.png";
-import MarkdownParser from "@/components/MarkdownParser.vue";
+import MarkdownParser from "@/components/MainMarkdownParser.vue";
 import { useDataListStore } from "@/store/dataList";
 const dataListStore = useDataListStore();
 </script>

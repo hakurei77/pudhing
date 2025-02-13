@@ -1,4 +1,5 @@
-import { useDataListStore } from "@/store/dataList";
+import { useCurrentAssistantDataStore } from "@/store/currentAssistantData";
+import { useLocalhostDataeStore } from "@/store/localhostData";
 // 定义文本类型的类型别名
 type TextItem = {
     type: 'text';
@@ -12,12 +13,36 @@ type ImageItem = {
     };
 };
 // 定义整个数据格式的类型别名
-type DataFormat = TextItem | ImageItem ;
-const sendFormData = async (url: string , data: DataFormat[]) => {
+type DataFormat = {
+    assistant: string;
+    data: TextItem[] | ImageItem[]
+};
+
+const getUserData = async (url: string) => {
     try {
-        const dataListStore = useDataListStore();
+        const localhostDataStore = useLocalhostDataeStore();
+        const currentAssistantDataStore = useCurrentAssistantDataStore();
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`);}
+        const responseData = await response.json();
+        localhostDataStore.addLocalhostData(responseData.data);
+        currentAssistantDataStore.addFirstAssistantData();
+    } catch (error) {
+        alert('请求失败，请稍后再试' + error);
+    }
+};
+
+const sendFormData = async (url: string, data: DataFormat) => {
+    try {
+        const dataListStore = useCurrentAssistantDataStore();
         //当数据发送时(将数据存入dataListStore)
-        dataListStore.addUserData(data);
+        dataListStore.addUserData(data.data);
         dataListStore.addSystemList();
         // 发送 POST 请求到后端
         const response = await fetch(url, {
@@ -25,11 +50,9 @@ const sendFormData = async (url: string , data: DataFormat[]) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(data) 
+            body: JSON.stringify(data)
         });
-        if (!response.ok)  {
-            throw new Error('提交失败');
-        }
+        if (!response.ok) { throw new Error('提交失败'); }
         const reader = response.body?.getReader();
         const textDecoder = new TextDecoder();
         while (true) {
@@ -46,5 +69,6 @@ const sendFormData = async (url: string , data: DataFormat[]) => {
 };
 
 export {
-    sendFormData
+    sendFormData,
+    getUserData
 };

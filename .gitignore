@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.cache_ggshield
+.gitguardian.yaml
+database/datatest.json

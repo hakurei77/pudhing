@@ -1,8 +1,8 @@
 <template>
     <div class="flex flex-col h-screen flex-1">
-        <LLMHeader class="flex-shrink-0" @update-data="handleUpdate"/>
+        <LLMHeader class="flex-shrink-0" :name="currentAssistantData.assistantData.name"  @update-data="handleUpdate"/>
         <div class="flex overflow-auto overflow-x-hidden flex-col items-center w-full p-6 flex-1" ref="scrollContainer">
-            <CharacterIntroduction class="max-w-[800px]" />
+            <CharacterIntroduction :name="currentAssistantData.assistantData.name" :description="currentAssistantData.assistantData.description" class="max-w-[800px]" />
             <DialogBox class="max-w-[800px]" />
         </div>
         <SubmitButton :sendScrollToBottom="ScrollToBottom"/>
@@ -15,8 +15,13 @@ import LLMHeader from './LLMHeader.vue';
 import CharacterIntroduction from './MainCharacterIntroduction.vue';
 import DialogBox from './MainDialogBox.vue';
 import SubmitButton from './SubmitButton.vue';
-import { useSidebarStateStore } from '@/store/SidebarState';
+import { useSidebarStateStore } from '@/store/sidebarState';
+import { useCurrentAssistantDataStore } from '@/store/currentAssistantData';
 const SidebarState = useSidebarStateStore();
+const currentAssistantData = useCurrentAssistantDataStore();
+/**
+ * 此函数用于接收LLMHeader的侧边栏状态
+*/
 const handleUpdate = (payload: boolean) => {
     SidebarState.value = payload;
 };

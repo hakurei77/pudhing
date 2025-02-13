@@ -229,7 +229,10 @@ const handleSubmit = async () => {
     formDataStore.changeDataFormat();
     dataInit();
     const sendData = JSON.parse(JSON.stringify(formDataStore.submitData));
-    sendFormDataApi(sendData);
+    sendFormDataApi({
+        assistant:"test-assistantNeko",
+        data:sendData
+    });
     isLoading.value = false;
 };
 // ======================

@@ -1,6 +1,6 @@
 <template>
     <transition name="slide">
-        <div v-if="isOpen" class="w-[75%] h-screen bg-white fixed z-3">
+        <div v-if="sidebarState.value" class="w-[75%] h-screen bg-white fixed z-3">
             <LLMHeader type="sidebar" />
             <div class="w-full p-3 border-solid border-b border-[var(--divided-line)] flex">
                 <div class="w-[50%] h-[70px] bg-[var(--background-gray)] mr-2 rounded-md flex flex-col p-2.5 justify-between">
@@ -21,41 +21,56 @@
         </div>
     </transition>
     <transition name="overlay">
-        <div v-if="isOpen" class="fixed inset-0 bg-black/50 z-2" @click="cancelOpen"></div>
+        <div v-if="sidebarState.value" class="fixed inset-0 bg-black/50 z-2" @click="cancelOpen"></div>
     </transition>
     <div class="w-[300px] h-screen bg-white hidden lg:block border-solid border-r border-[var(--divided-line)]">
         <LLMHeader type="sidebar" />
         <div class="w-full p-3 border-solid border-b border-[var(--divided-line)] flex">
-            <div class="w-[50%] h-[70px] bg-[var(--background-gray)] mr-2 rounded-md flex flex-col p-2.5 justify-between">
+            <RouterLink to="/chat" class="w-[50%] h-[70px] bg-[var(--background-gray)] border-transparent hover:border-[var(--primary-color)] border-solid border-[2px] transition-colors cursor-pointer mr-2 rounded-md flex flex-col p-2.5 justify-between">
                 <SvgIcon name="message-circle" :scale="1.5" />
                 <div class="flex justify-between items-center">
                     <span class="font-bold text-sm">开始聊天</span>
                     <SvgIcon name="chevron-right" :scale="1.5" />
                 </div>
-            </div>
-            <div class="w-[50%] h-[70px] bg-[var(--background-gray)] rounded-md flex flex-col p-2.5 justify-between">
+            </RouterLink>
+            <RouterLink to="/create" class="w-[50%] h-[70px] bg-[var(--background-gray)] border-transparent hover:border-[var(--primary-color)] border-solid border-[2px] transition-colors cursor-pointer rounded-md flex flex-col p-2.5 justify-between">
                 <SvgIcon name="robot-plus" :scale="1.5" />
                 <div class="flex justify-between items-center">
                     <span class="font-bold text-sm">创建机器人</span>
                     <SvgIcon name="plus" :scale="1.5" />
                 </div>
-            </div>
+            </RouterLink>
         </div>
+        <template v-for="item in localhostData.value" :key="item.id">
+            <RouterLink :to="`/chat/${item.id}`" @click="changeAssistant(item.id)">
+                <SidebarAssistantIntroduction :type="item.type" :description="item.description" :name="item.name" :id="item.id" />
+            </RouterLink>
+        </template>
     </div>
 </template>
 
 <script setup lang="ts">
 import SvgIcon from './Global/SvgIcon.vue';
 import LLMHeader from './LLMHeader.vue';
-withDefaults(defineProps<{
-    isOpen: boolean
-}>(), {
-    isOpen: false
-});
-const emit = defineEmits(['close']);
+import SidebarAssistantIntroduction from './SidebarAssistantIntroduction.vue';
+import { useSidebarStateStore } from '@/store/sidebarState';
+import { useLocalhostDataeStore } from '@/store/localhostData';
+import { useCurrentAssistantDataStore} from '@/store/currentAssistantData';
+const sidebarState = useSidebarStateStore();
+const localhostData = useLocalhostDataeStore();
+const dataListStore = useCurrentAssistantDataStore();
 
+/**
+ * 此函数用于关闭侧边栏
+*/
 const cancelOpen = () => {
-    emit('close');
+    sidebarState.value = false;
+};
+/**
+ * 此函数用于切换侧边栏中的assistant
+*/
+const changeAssistant = (id: string) => {
+    dataListStore.addAssistantData(id);
 };
 
 </script>

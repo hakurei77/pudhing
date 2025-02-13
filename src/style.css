@@ -2,7 +2,7 @@
 @import 'highlight.js/styles/tokyo-night-dark.css'; /* 代码高亮 */
 
 :root {
-    --primary-color: #9a70dd; /* 主色调 */
+    --primary-color: #ffdd1f; /* 主色调 */
     --secondary-color: #ffed4a; /* 次色调 */
     --background-gray: #f7f7f7; /* 背景色 */
     --background-text-gray: #99a1af; /* 背景文字色 */

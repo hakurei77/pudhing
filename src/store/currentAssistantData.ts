@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-
 type User = {
     type: 'text';
     text: string;
@@ -14,6 +13,16 @@ type List = User | Assistant ;
 type DataList = {
     role: string;
     content: List[];
+}
+type AssistantData = {
+    id: string,
+    isDelete: false,
+    type: string,
+    prompt: string,
+    "name": string,
+    description: string,
+    image: string,
+    historics?: [],
 }
 //数据格式
 // [
@@ -48,9 +57,14 @@ type DataList = {
 //         ]
 //     }
 // ]
-export const useDataListStore = defineStore('data-list', {
+import { useLocalhostDataeStore } from './localhostData';
+/**
+ * 用来处理对话框区域渲染数据
+*/
+export const useCurrentAssistantDataStore = defineStore('current-assistant-data', {
     state: () => ({
         dataList: [] as DataList[],
+        assistantData: {} as AssistantData
     }),
     actions: {
         addUserData(data: List[]) {
@@ -76,7 +90,14 @@ export const useDataListStore = defineStore('data-list', {
                     item.text += data;
                 }
             });
+        },
+        addAssistantData(id: string){
+            const localhostDataStore = useLocalhostDataeStore();
+            this.assistantData = localhostDataStore.value.find((item)=>item.id === id) as AssistantData;
+        },
+        addFirstAssistantData(){
+            const localhostDataStore = useLocalhostDataeStore();
+            this.assistantData = localhostDataStore.value[0];
         }
     },
-    persist: true,
 });

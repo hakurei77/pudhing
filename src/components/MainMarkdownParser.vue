@@ -38,7 +38,21 @@ const md = new MarkdownIt({
             } catch (e) { alert("Highlight error:" + e); }
         }
         // 如果没有指定语言或者出错，使用普通代码块
-        return `<pre class="hljs rounded-md p-3 mb-2">`+`<code>${md.utils.escapeHtml(str)}</code>`+`</pre>`;
+        return `<div class="hljs flex justify-between  p-2 border-b-[1px] rounded-t-md text-xs">`+
+                    `其他`+
+                    `<div class="copy-area text-xs flex items-center cursor-pointer">`+
+                        `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24">`+
+                            `<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">`+
+                                `<rect width="13" height="13" x="9" y="9" rx="2" ry="2"/>`+
+                                `<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>`+
+                            `</g>`+
+                        `</svg>`+
+                        `<span class="copy ml-1">复制</span>`+
+                    `</div>`+
+                `</div>`+
+                `<pre class="hljs rounded-b-md mb-2 p-3">`+
+                    `<code>${md.utils.escapeHtml(str)}</code>`+
+                `</pre>`;
     }
 });
 md.renderer.rules.strong_open = () => {

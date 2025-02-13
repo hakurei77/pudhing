@@ -1,4 +1,4 @@
-import { sendFormData } from "@/utils/request";
+import { sendFormData, getUserData } from "@/utils/request";
 
 // 定义文本类型的类型别名
 type TextItem = {
@@ -13,9 +13,18 @@ type ImageItem = {
     };
 };
 // 定义整个数据格式的类型别名
-type DataFormat = TextItem | ImageItem ;
-const sendFormDataApi = async (data: DataFormat[]) => {
-    return await sendFormData("http://localhost:3000/api/getFormData", data);
+type DataFormat = {
+    assistant: string;
+    data: TextItem[] | ImageItem[]  
+};
+const sendFormDataApi = async (data: DataFormat) => {
+    return await sendFormData("http://localhost:3000/api/sendFormData", data);
+};
+const getUserDataApi = async () => {
+    return await getUserData("http://localhost:3000/api/getUserData");
 };
 
-export { sendFormDataApi };
+export { 
+    sendFormDataApi,
+    getUserDataApi 
+};

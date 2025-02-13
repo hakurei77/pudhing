@@ -51,7 +51,7 @@ export const useFormDataStore = defineStore('form-data', {
                     text: this.value.text,
                 });
                 fileExtraction.forEach((item: Attachment) => {
-                    if(item.type === 'image'){
+                    if(item.type === 'image'){  //暂时只包含图片处理
                         this.submitData.push({
                             type: "image_url",
                             image_url: {

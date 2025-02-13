@@ -1,0 +1,20 @@
+{
+    "assistant":[
+        {
+            "id": 1,
+            "name": "小黑塔",
+            "description": "This is the first assistant",
+            "prompt": "This is the prompt for the first assistant",
+            "image": "https://i.imgur.com/7XZG1JL.png",
+            "history":[
+
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Assistant 2",
+            "description": "This is the second assistant",
+            "image": "https://i.imgur.com/7XZG1JL.png"
+        }
+    ]
+}

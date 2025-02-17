@@ -1,7 +1,6 @@
 //通过vue-router插件实现模板路由配置
 import { createRouter, createWebHistory } from 'vue-router';
 import { constantRoute } from './routes';
-import { useCurrentAssistantDataStore } from '@/store/currentAssistantData';
 
 //创建路由器
 const router = createRouter({
@@ -15,19 +14,25 @@ const router = createRouter({
         };
     }
 });
+import { useAssistantDataStore } from "@/store/assistantData";
 let isFirstVisit = true;
-
-router.beforeEach((to, _ , next) => {
-    if (to.path === '/chat') {
+router.beforeEach(async (to, _, next) => {
+    const assistantDataStore = useAssistantDataStore();
+    if (to.path.startsWith('/')) {
         if (!isFirstVisit) {
-            const dataListStore = useCurrentAssistantDataStore();
-            dataListStore.addFirstAssistantData();
+            assistantDataStore.selectFirstAssistant();
         } else {
-            // 第一次访问时，将 isFirstVisit 设置为 false
+            await assistantDataStore.getCurrentData();
+            assistantDataStore.selectFirstAssistant();
             isFirstVisit = false;
         }
+        if (to.path.startsWith('/chat/')) { 
+            const contentAfterChat = to.path.split('/chat/')[1];
+            await assistantDataStore.getCurrentAssistantHistory(contentAfterChat);
+            assistantDataStore.changeCurrentAssistant(contentAfterChat);
+        }
     }
-    next(); // 确保要调用 next() 来继续导航
+    next(); // 确保调用 next()
 });
 
 

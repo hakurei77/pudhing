@@ -14,7 +14,7 @@ export const constantRoute = [
             },
             {
                 path: "chat/:assistantId",
-                component: () => import('@/components/MainLayout.vue'),
+                component: () => import('@/components/MainDialogPage.vue'),
             },
             {
                 path: 'create',

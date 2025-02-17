@@ -1,5 +1,3 @@
-import { useCurrentAssistantDataStore } from "@/store/currentAssistantData";
-import { useLocalhostDataeStore } from "@/store/localhostData";
 // 定义文本类型的类型别名
 type TextItem = {
     type: 'text';
@@ -14,14 +12,14 @@ type ImageItem = {
 };
 // 定义整个数据格式的类型别名
 type DataFormat = {
-    assistant: string;
+    assistantId: string;
     data: TextItem[] | ImageItem[]
 };
-
-const getUserData = async (url: string) => {
+/**
+ * 获取assistant基础数据
+*/
+const getAssistantList = async (url: string) => {
     try {
-        const localhostDataStore = useLocalhostDataeStore();
-        const currentAssistantDataStore = useCurrentAssistantDataStore();
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -31,19 +29,17 @@ const getUserData = async (url: string) => {
         });
         if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`);}
         const responseData = await response.json();
-        localhostDataStore.addLocalhostData(responseData.data);
-        currentAssistantDataStore.addFirstAssistantData();
+        return responseData.data;
     } catch (error) {
         alert('请求失败，请稍后再试' + error);
     }
 };
-
+import { useAssistantDataStore } from "@/store/assistantData";
 const sendFormData = async (url: string, data: DataFormat) => {
     try {
-        const dataListStore = useCurrentAssistantDataStore();
-        //当数据发送时(将数据存入dataListStore)
-        dataListStore.addUserData(data.data);
-        dataListStore.addSystemList();
+        const assistantDataStore = useAssistantDataStore();
+        assistantDataStore.addUserData(data.assistantId , data.data);
+        assistantDataStore.addAssistantList(data.assistantId);
         // 发送 POST 请求到后端
         const response = await fetch(url, {
             method: 'POST',
@@ -61,14 +57,32 @@ const sendFormData = async (url: string, data: DataFormat) => {
                 break;
             }
             const response = textDecoder.decode(value);
-            dataListStore.addSystemData(response);
+            assistantDataStore.addDataToAssistantList(data.assistantId , response);
         }
     } catch (error) {
         alert('提交失败，请稍后再试' + error);
     }
 };
 
+const getAssistantHistory = async (url: string ,data: string) => {
+    try {
+        const response = await fetch(url, {
+            method: 'POST', // 使用 POST 请求
+            headers: {
+                'Content-Type': 'application/json', // 设置请求头
+            },
+            body: JSON.stringify({ id: data }), // 将输入数据转换为 JSON 字符串
+        });
+        if (!response.ok) { throw new Error(`Error: ${response.status} ${response.statusText}`); }
+        const result = await response.json(); // 解析 JSON 响应
+        return result;
+    } catch (error) {
+        alert(error); // 重新抛出错误以供进一步处理
+    }
+};
+
 export {
     sendFormData,
-    getUserData
+    getAssistantList,
+    getAssistantHistory
 };

@@ -70,7 +70,9 @@
 <script setup lang="ts">
 import { ref, onBeforeUnmount , nextTick } from 'vue';
 import { useFormDataStore } from "@/store/useFormDataStore";
+import { useAssistantDataStore } from "@/store/assistantData";
 import { sendFormDataApi } from '@/api/data';
+import router from '@/router';
 const formDataStore = useFormDataStore(); 
 interface Attachment {  // 附件类型
     file: File;
@@ -215,6 +217,7 @@ onBeforeUnmount(() => {
 // 核心逻辑
 // ======================
 // 提交表单
+const assistantDataStore = useAssistantDataStore();
 const isLoading = ref(false); // 加载状态
 const handleSubmit = async () => {
     if (textareaContent.value.trim() === '' && attachments.value.length === 0) {
@@ -229,8 +232,9 @@ const handleSubmit = async () => {
     formDataStore.changeDataFormat();
     dataInit();
     const sendData = JSON.parse(JSON.stringify(formDataStore.submitData));
+    router.push('/chat/'+ assistantDataStore.currentId);
     sendFormDataApi({
-        assistant:"test-assistantNeko",
+        assistantId:assistantDataStore.currentId,
         data:sendData
     });
     isLoading.value = false;

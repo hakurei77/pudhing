@@ -19,8 +19,6 @@ let messageHistory = [];
 let responseData = '';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dataFilePath = path.join(__dirname, '../database', 'datatest.json');//这里可以将路径修改为自己的json路径
-const data = fs.readFileSync(dataFilePath, 'utf8');
-const jsonData = JSON.parse(data);
 /**
  * 根据传入的type参数，选择不同的模型
  */ 
@@ -124,19 +122,22 @@ const sendDataToAPI = async (res , data) => {
     } catch (error) {
         console.error('Fetch error:', error);
         res.status(500).json({ error: error.message });
-    }
+    } 
 }
 /**
- * 该函数用于处理用户的请求，并流式返回api生成的内容
-*/
+ * 该函数用于处理用户的请求，并流式返回api生成的内容（已完成）
+*/ 
 app.post('/api/sendFormData', async (req, res) => {
-    //获取用户输入
+    const data = fs.readFileSync(dataFilePath, 'utf8');
+    const jsonData = JSON.parse(data);
     const userMessage = req.body;
-    //处理数据库匹配项
-    const assistantData = jsonData.assistant.find(item => item.id === userMessage.assistant);
+    const assistantData = jsonData.assistant.find(item => item.id === userMessage.assistantId);
+    console.log(assistantData)
     assistantData.history.push({
+        id: assistantData.history.length,
+        isDelete: false,
         role:"user",
-        content:userMessage.data
+        contentList:userMessage.data
     });
     fs.writeFileSync(dataFilePath, JSON.stringify(jsonData, null, 2), 'utf8');
     if (assistantData.type === "Doubao-DeepSeek-R1") {
@@ -149,22 +150,50 @@ app.post('/api/sendFormData', async (req, res) => {
         const data = createChatRequestData(userMessage.data,assistantData);
         await sendDataToAPI(res,data)
     }
-    assistantData.history.push({
+    assistantData.history.push({ 
+        id: assistantData.history.length,
+        isDelete: false,
         role:"assistant",
-        content:responseData
+        contentList:[
+            {
+                type: "text",
+                text: responseData
+            }
+        ]
     });
     fs.writeFileSync(dataFilePath, JSON.stringify(jsonData, null, 2), 'utf8');
 });
 /**
- * 页面加载时输出用户数据
+ * 获取assistant基础数据[id,type,prompt,name,description,image,history:[]]（已完成）
 */
-app.get('/api/getUserData', async (req, res) => {
-    const filteredData = jsonData.assistant.map(assistant => {
-        const { memory, history, ...rest } = assistant;
-        return rest;
+app.get('/api/getAssistantList', async (req, res) => {
+    const data = fs.readFileSync(dataFilePath, 'utf8');
+    const jsonData = JSON.parse(data);
+    const filteredData = jsonData.assistant.filter(assistant => !assistant.isDelete).map(assistant => {
+        const { prompt,memory, isDelete, ...rest } = assistant; 
+        return {
+            ...rest,
+            history: []
+        };
     });
     res.status(200).json({
         data: filteredData
+    });
+});
+/**
+ * 获取对应assistant历史记录数据
+*/
+app.post('/api/getAssistantHistoryData', async (req, res) => {
+    const data = fs.readFileSync(dataFilePath, 'utf8');
+    const jsonData = JSON.parse(data);
+    const { id } = req.body;
+    const assistantData = jsonData.assistant.find(assistant => assistant.id === id);
+    if (!assistantData || assistantData.isDelete) {
+        return res.status(404).json({ message: 'Assistant not found or deleted' });
+    }
+    const filteredHistory = assistantData.history.filter(item => !item.isDelete);
+    res.status(200).json({
+        history: filteredHistory
     });
 });
 

@@ -41,7 +41,7 @@
                 </div>
             </RouterLink>
         </div>
-        <template v-for="item in localhostData.value" :key="item.id">
+        <template v-for="item in assistantDataStore.data" :key="item.id">
             <RouterLink :to="`/chat/${item.id}`" @click="changeAssistant(item.id)">
                 <SidebarAssistantIntroduction :type="item.type" :description="item.description" :name="item.name" :id="item.id" />
             </RouterLink>
@@ -54,12 +54,9 @@ import SvgIcon from './Global/SvgIcon.vue';
 import LLMHeader from './LLMHeader.vue';
 import SidebarAssistantIntroduction from './SidebarAssistantIntroduction.vue';
 import { useSidebarStateStore } from '@/store/sidebarState';
-import { useLocalhostDataeStore } from '@/store/localhostData';
-import { useCurrentAssistantDataStore} from '@/store/currentAssistantData';
+import { useAssistantDataStore } from "@/store/assistantData";
+const assistantDataStore = useAssistantDataStore();
 const sidebarState = useSidebarStateStore();
-const localhostData = useLocalhostDataeStore();
-const dataListStore = useCurrentAssistantDataStore();
-
 /**
  * 此函数用于关闭侧边栏
 */
@@ -70,7 +67,7 @@ const cancelOpen = () => {
  * 此函数用于切换侧边栏中的assistant
 */
 const changeAssistant = (id: string) => {
-    dataListStore.addAssistantData(id);
+    assistantDataStore.changeCurrentAssistant(id);
 };
 
 </script>

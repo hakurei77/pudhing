@@ -1,7 +1,7 @@
 <template>
     <template v-if="type === 'header'">
         <div v-bind="$attrs" class="flex bg-[var(--background-gray)] w-full h-[50px] items-center border-b-[1px] border-solid border-[var(--divided-line)]">
-            <SvgIcon name="list" :scale="1.5" class="ml-5 cursor-pointer lg:hidden" @click="sendData" />
+            <SvgIcon name="list" :scale="1.5" class="ml-5 cursor-pointer lg:hidden" @click="handleClick" />
             <template v-if="img === ''">
                 <ImgBox :scale="3.5" :src="pudhing" class="ml-5" />
             </template>
@@ -20,20 +20,19 @@
 <script setup lang="ts">
 import pudhing from "@/assets/imgs/pudhing.png";
 withDefaults(defineProps<{
-    name: string,
+    name?: string,
     img?: string
     type?: string
 }>(), {
     type: "header",
     img:""
 });
-
-const emit = defineEmits(['updateData']);
 /**
  * 向MainLayout组件传出true来修改侧边栏
 */
-const sendData = () => {
-    emit('updateData', true);
+const emit = defineEmits(['click']);
+const handleClick = () => {
+    emit('click'); // 改为 'click' 事件
 };
 
 </script>

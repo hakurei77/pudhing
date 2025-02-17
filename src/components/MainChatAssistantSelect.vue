@@ -10,8 +10,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import imgScr from "@/assets/imgs/pudhing.png";
-import { useCurrentAssistantDataStore } from "@/store/currentAssistantData";
-const dataListStore = useCurrentAssistantDataStore();
+import { useAssistantDataStore } from "@/store/assistantData";
+const assistantDataStore = useAssistantDataStore();
 const props = withDefaults(defineProps<{
     id?: string,
     text: string,
@@ -25,8 +25,8 @@ const props = withDefaults(defineProps<{
 const activeClass = computed(() => {
     return {
         'border-solid border-2': true,
-        'border-[var(--primary-color)]': props.id === dataListStore.assistantData.id,
-        'border-[var(--divided-line)]': props.id !== dataListStore.assistantData.id
+        'border-[var(--primary-color)]': props.id === assistantDataStore.currentId,
+        'border-[var(--divided-line)]': props.id !== assistantDataStore.currentId  
     };
 });
 </script>

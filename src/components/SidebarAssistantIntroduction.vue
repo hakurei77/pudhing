@@ -15,12 +15,10 @@
 import { computed } from "vue";
 import { useRoute } from 'vue-router';
 import imgScr from "@/assets/imgs/pudhing.png";
-import { useCurrentAssistantDataStore } from "@/store/currentAssistantData";
-const dataListStore = useCurrentAssistantDataStore();
 const route = useRoute();
 const props = withDefaults(defineProps<{
     id?: string,
-    img?: string
+    img?: string,
     type: string,
     name: string,
     description: string
@@ -39,7 +37,7 @@ const routeId = computed(() => {
 */
 const activeClass = computed(() => {
     return {
-        'bg-[var(--background-gray)]': props.id === dataListStore.assistantData.id && props.id === routeId.value,
+        'bg-[var(--background-gray)]': props.id === routeId.value,
     };
 });
 </script>

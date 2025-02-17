@@ -51,7 +51,7 @@ type Assistant = {
 };
 type ContentList = User | Assistant ;
 type HistoryData = {
-    id: string,
+    id: number,
     role: string,
     contentList: ContentList[]
 };

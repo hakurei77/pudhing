@@ -63,8 +63,12 @@ const sendFormData = async (url: string, data: DataFormat) => {
             const lines = chunk.split('\n');
             for (const line of lines) {
                 if (line.startsWith('data: ')) {
-                    const response = line.slice(6); // 去掉 'data: ' 前缀
+                    let response = line.slice(6); // 去掉 'data: ' 前缀
+                    if (response === '') {
+                        response = "\n";
+                    }
                     assistantDataStore.addDataToAssistantList(data.assistantId, response);
+
                 }
             }
         }

@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Assistant {
+  id          String    @id
+  isDelete    Boolean   @default(false)
+  type        String
+  prompt      String    @db.Text
+  memories    Memory[]
+  name        String
+  description String    @db.Text
+  image       String    @db.Text
+  histories   History[]
+}
+
+model History {
+  id              Int              @id @default(autoincrement())
+  isDelete        Boolean          @default(false)
+  assistant       Assistant        @relation(fields: [assistantId], references: [id])
+  assistantId     String
+  role            String
+  historyContents HistoryContent[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model Memory {
+  id             Int             @id @default(autoincrement())
+  isDelete       Boolean         @default(false)
+  assistant      Assistant       @relation(fields: [assistantId], references: [id])
+  assistantId    String
+  role           String
+  memoryContents MemoryContent[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model HistoryContent {
+  id        Int      @id @default(autoincrement())
+  data      Json
+  history   History  @relation(fields: [historyId], references: [id])
+  historyId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MemoryContent {
+  id        Int      @id @default(autoincrement())
+  data      Json
+  memory    Memory   @relation(fields: [memoryId], references: [id])
+  memoryId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

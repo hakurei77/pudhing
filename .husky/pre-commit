@@ -1,3 +1,2 @@
-pnpm lint:lint-staged
-pnpm test
-
+pnpm -F pudhing-llm-server run lint-staged
+pnpm -F pudhing-llm-client run lint-staged

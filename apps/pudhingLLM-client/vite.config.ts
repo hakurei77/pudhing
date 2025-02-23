@@ -19,6 +19,7 @@ export default defineConfig(() => {
         resolve: {
             alias: {
                 "@": path.resolve(__dirname, "./src"),
+                '@pudhing-ui': './node_modules/pudhing-ui/dist' 
             }
         },
         test: {

@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev:local": "vite",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
@@ -21,7 +21,7 @@
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
-    "@pudhing/ui-beta": "workspace:*",
+    "pudhing-ui": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@tailwindcss/vite": "^4.0.0",
     "@types/markdown-it": "^14.1.2",

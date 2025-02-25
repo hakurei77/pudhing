@@ -32,6 +32,7 @@ const getAssistantList = async (url: string) => {
         return responseData.data;
     } catch (error) {
         alert('请求失败，请稍后再试' + error);
+        return [];
     }
 };
 import { useAssistantDataStore } from "@/store/assistantData";

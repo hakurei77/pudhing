@@ -8,6 +8,9 @@ import globalComponent from '@/components/Global';
 //@ts-expect-error 下面的virtual:svg-icons-register总是报找不到，但是文件运行没有问题，所以这里忽略
 import 'virtual:svg-icons-register';
 
+import Pudhing from "pudhing-ui";
+import "pudhing-ui/dist/index.css";
+
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
-createApp(App).use(pinia).use(router).use(globalComponent).mount('#app');
+createApp(App).use(pinia).use(router).use(globalComponent).use(Pudhing).mount('#app');

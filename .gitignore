@@ -41,3 +41,5 @@ yarn-error.log*
 .gitguardian.yaml
 .env.development
 .env.production
+
+packages/ui/packages/docs/.vitepress/cache

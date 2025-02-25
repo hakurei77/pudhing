@@ -51,7 +51,9 @@ export const useAssistantDataStore = defineStore('assistantData', {
             return this.data.find(item => item.id === id);
         },
         selectFirstAssistant() {
-            this.currentId = this.data[0].id;
+            if (this.data.length != 0) {
+                this.currentId = this.data[0].id;
+            }
         },
         addUserData(id: string, data: ContentList[]) {
             const datalist = this.data.find(item => item.id === id)?.histories;

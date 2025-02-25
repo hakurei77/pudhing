@@ -32,7 +32,7 @@ router.beforeEach(async (to, _, next) => {
             assistantDataStore.changeCurrentAssistant(contentAfterChat);
         }
     }
-    next(); // 确保调用 next()
+    next(); 
 });
 
 

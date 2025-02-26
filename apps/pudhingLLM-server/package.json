@@ -24,8 +24,11 @@
     "migrate:local": "dotenv -e .env.development -- npx prisma migrate dev",
     "db:local": "dotenv -e .env.development -- npx prisma db push",
     "seed:local": "dotenv -e .env.development -- npx prisma db seed",
+    "deploy:local": "dotenv -e .env.development -- npx prisma migrate deploy",
     "migrate": "dotenv -e .env.production -- npx prisma migrate dev",
     "seed": "dotenv -e .env.production -- npx prisma db seed",
+    "db": "dotenv -e .env.production -- npx prisma db push",
+    "deploy": "dotenv -e .env.production -- npx prisma migrate deploy",
     "lint-staged": "lint-staged"
   },
   "dependencies": {
@@ -43,7 +46,6 @@
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
-    "@repo/eslint-config": "workspace:*",
     "@swc/cli": "^0.6.0",
     "@swc/core": "^1.10.7",
     "@types/express": "^5.0.0",

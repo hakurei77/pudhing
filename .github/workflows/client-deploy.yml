@@ -1,0 +1,50 @@
+name: Client Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/pudhingLLM-client/**'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      BAOTA_CLIENT_DEPLOY_PATH: ${{ secrets.BAOTA_CLIENT_DEPLOY_PATH }}
+      BAOTA_HOST: ${{ secrets.BAOTA_HOST }}
+      BAOTA_PASSWORD: ${{ secrets.BAOTA_PASSWORD }}
+      BAOTA_USER: ${{ secrets.BAOTA_USER }}
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+          
+      - name: Install Dependencies
+        working-directory: .
+        run: pnpm install
+      
+      - name: Build Workspace Dependencies
+        working-directory: ./packages/ui
+        run: pnpm run build
+
+      - name: Build Application
+        working-directory: ./apps/pudhingLLM-client
+        run: pnpm run build
+
+      - name: Deploy to Server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ env.BAOTA_HOST }}
+          username: ${{ env.BAOTA_USER }}
+          password: ${{ env.BAOTA_PASSWORD }}
+          source: "./apps/pudhingLLM-client/dist/*"
+          strip_components: 3
+          target: ${{ env.BAOTA_CLIENT_DEPLOY_PATH }}

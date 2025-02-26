@@ -1,0 +1,86 @@
+name: Server Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/pudhingLLM-server/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      BAOTA_CLIENT_DEPLOY_PATH: ${{ secrets.BAOTA_CLIENT_DEPLOY_PATH }}
+      BAOTA_DATABASE_URL: ${{ secrets.BAOTA_DATABASE_URL }}
+      BAOTA_HOST: ${{ secrets.BAOTA_HOST }}
+      BAOTA_PASSWORD: ${{ secrets.BAOTA_PASSWORD }}
+      BAOTA_SERVER_DEPLOY_PATH: ${{ secrets.BAOTA_SERVER_DEPLOY_PATH }}
+      BAOTA_USER: ${{ secrets.BAOTA_USER }}
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+          
+      - name: Install Dependencies
+        working-directory: ./apps/pudhingLLM-server
+        run: pnpm install
+      
+      - name: Generate Prisma Client
+        working-directory: ./apps/pudhingLLM-server
+        run: pnpm prisma generate
+        
+      - name: Build Application
+        working-directory: ./apps/pudhingLLM-server
+        run: pnpm run build
+
+      - name: Deploy to Server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ env.BAOTA_HOST }}
+          username: ${{ env.BAOTA_USER }}
+          password: ${{ env.BAOTA_PASSWORD }}
+          source: "./apps/pudhingLLM-server/*"
+          strip_components: 2
+          target: ${{ env.BAOTA_SERVER_DEPLOY_PATH }}
+
+      - name: Install dependencies on server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.BAOTA_HOST }}
+          username: ${{ env.BAOTA_USER }}
+          password: ${{ env.BAOTA_PASSWORD }}
+          script: |
+            cd ${{ env.BAOTA_SERVER_DEPLOY_PATH }}
+            npm install -g pnpm --prefix /usr/local
+            export PATH=$PATH:/usr/local/bin
+            pnpm install 
+
+      - name: Prisma Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.BAOTA_HOST }}
+          username: ${{ env.BAOTA_USER }}
+          password: ${{ env.BAOTA_PASSWORD }}
+          script: |
+            cd ${{ env.BAOTA_SERVER_DEPLOY_PATH }}
+            pnpm run deploy
+
+      - name: Restart PM2 process
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.BAOTA_HOST }}
+          username: ${{ env.BAOTA_USER }}
+          password: ${{ env.BAOTA_PASSWORD }}
+          script: |
+            cd ${{ env.BAOTA_SERVER_DEPLOY_PATH }}
+            pm2 delete ecosystem.config.js || true
+            pm2 start ecosystem.config.js --env production

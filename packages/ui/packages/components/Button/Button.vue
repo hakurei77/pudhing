@@ -1,5 +1,5 @@
 <template>
-    <button style="color: var(--color-primary);">this is a button</button>
+    <button class="bg-red-500">this is a button</button>
 </template>
 
 <script setup lang="ts">

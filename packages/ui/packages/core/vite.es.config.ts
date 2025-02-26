@@ -1,14 +1,22 @@
 import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
+import { readdirSync } from "fs";
+import { filter, map } from "lodash-es";
+import vue from "@vitejs/plugin-vue";
 import dts from "vite-plugin-dts";
 
-const COMP_NAMES = [
-  "Button",
-] as const;
+function getDirectoriesSync(basePath: string) {
+  const entries = readdirSync(basePath, { withFileTypes: true });
+
+  return map(
+    filter(entries, (entry) => entry.isDirectory()),
+    (entry) => entry.name
+  );
+}
 
 export default defineConfig({
-  plugins: [vue(), dts(
+  plugins: [vue(),
+    dts(
     {
       tsconfigPath: "../../tsconfig.build.json",
       outDir: "dist/types"
@@ -41,9 +49,9 @@ export default defineConfig({
           if (id.includes("/packages/utils")) {
             return "utils"
           }
-          for (const item of COMP_NAMES) {
-            if (id.includes(`/packages/components/${item}`)) {
-              return item
+          for (const dirname of getDirectoriesSync("../components")) {
+            if (id.includes(`/packages/components/${dirname}`)) {
+              return dirname
             }
           }
         }

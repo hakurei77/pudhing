@@ -15,6 +15,7 @@ jobs:
       BAOTA_HOST: ${{ secrets.BAOTA_HOST }}
       BAOTA_PASSWORD: ${{ secrets.BAOTA_PASSWORD }}
       BAOTA_USER: ${{ secrets.BAOTA_USER }}
+      VITE_APP_API_URL: ${{ secrets.VITE_APP_API_URL }} 
 
     steps:
       - uses: actions/checkout@v4
@@ -31,6 +32,11 @@ jobs:
         working-directory: .
         run: pnpm install
       
+      - name: Create env file
+        working-directory: ./apps/pudhingLLM-client
+        run: |
+          echo "VITE_APP_API_URL=${{ secrets.VITE_APP_API_URL }}" > .env.production
+
       - name: Build Workspace Dependencies
         working-directory: ./packages/ui
         run: pnpm run build

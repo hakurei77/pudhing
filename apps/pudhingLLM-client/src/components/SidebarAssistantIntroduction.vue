@@ -1,7 +1,7 @@
 <template>
     <div :class="activeClass" class="w-full h-[80px] border-b border-[var(--divided-line)] cursor-pointer hover:bg-[var(--background-gray)] flex items-center pr-4 pl-4 pt-2 pb-2 transition-colors">
         <template v-if="img === ''">
-            <ImgBox class="mr-2 flex-shrink-0" :scale="4" :src="imgScr"/>
+            <pd-imgBox class="mr-2 flex-shrink-0" :scale="4" :src="imgScr"/>
         </template>
         <div class="flex flex-col overflow-hidden text-ellipsis">
             <span class="text-xs truncate text-[var(--background-text-gray)]">{{ type }}</span>

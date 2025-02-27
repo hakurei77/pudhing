@@ -2,7 +2,7 @@
     <div class="w-[100%] rounded-[8px] bg-[var(--background-gray)] p-4">
         <div class="flex items-center w-full">
             <template v-if="img === ''">
-                <ImgBox :scale="5" :src="imgSrc"/>
+                <pd-imgBox :scale="5" :src="imgSrc"/>
             </template>
             <span class="ml-2 font-bold text-xl">{{ name }}</span>
         </div>

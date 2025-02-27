@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { getAssistantListApi, getAssistantHistoryApi } from '@/api/data';
+import router from '@/router';
 type User = {
     type: 'text';
     text: string;
@@ -34,7 +35,12 @@ export const useAssistantDataStore = defineStore('assistantData', {
             this.data = await getAssistantListApi();
         },
         async getCurrentAssistantHistory(id: string) {
-            const datalist = this.data.find(item => item.id === id)?.histories;
+            const assistant = this.data.find(item => item.id === id);
+            if (!assistant) {
+                router.push('/404');
+                return;
+            }
+            const datalist = assistant.histories;
             if (datalist?.length === 0) {
                 const history = await getAssistantHistoryApi(id);
                 if (history.history.length != 0) {

@@ -20,12 +20,6 @@ importers:
 
   apps/pudhingLLM-client:
     dependencies:
-      highlight.js:
-        specifier: ^11.11.1
-        version: 11.11.1
-      markdown-it:
-        specifier: ^14.1.0
-        version: 14.1.0
       pinia:
         specifier: ^2.3.1
         version: 2.3.1(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))
@@ -239,6 +233,9 @@ importers:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.7.3)
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
       '@types/lodash-es':
         specifier: 4.17.12
         version: 4.17.12
@@ -254,6 +251,9 @@ importers:
       '@vue/tsconfig':
         specifier: 0.7.0
         version: 0.7.0(typescript@5.7.3)(vue@3.5.13(typescript@5.7.3))
+      eslint:
+        specifier: ^9.18.0
+        version: 9.20.0(jiti@2.4.2)
       move-file-cli:
         specifier: ^3.0.0
         version: 3.0.0
@@ -274,6 +274,13 @@ importers:
         version: 2.2.4(typescript@5.7.3)
 
   packages/ui/packages/components:
+    dependencies:
+      highlight.js:
+        specifier: ^11.11.1
+        version: 11.11.1
+      markdown-it:
+        specifier: ^14.1.0
+        version: 14.1.0
     devDependencies:
       '@vitest/coverage-v8':
         specifier: 1.4.0
@@ -300,6 +307,12 @@ importers:
 
   packages/ui/packages/docs:
     devDependencies:
+      '@vitepress-demo-preview/component':
+        specifier: ^2.3.2
+        version: 2.3.2(vitepress@1.6.3(@algolia/client-search@5.20.3)(@types/node@22.13.5)(lightningcss@1.29.1)(postcss@8.5.3)(search-insights@2.17.3)(terser@5.39.0)(typescript@5.7.3))(vue@3.5.13(typescript@5.7.3))
+      '@vitepress-demo-preview/plugin':
+        specifier: ^1.2.3
+        version: 1.3.0(markdown-it-container@3.0.0)(vitepress@1.6.3(@algolia/client-search@5.20.3)(@types/node@22.13.5)(lightningcss@1.29.1)(postcss@8.5.3)(search-insights@2.17.3)(terser@5.39.0)(typescript@5.7.3))(vue@3.5.13(typescript@5.7.3))
       vitepress:
         specifier: ^1.6.3
         version: 1.6.3(@algolia/client-search@5.20.3)(@types/node@22.13.5)(lightningcss@1.29.1)(postcss@8.5.3)(search-insights@2.17.3)(terser@5.39.0)(typescript@5.7.3)
@@ -1157,6 +1170,9 @@ packages:
   '@eslint/plugin-kit@0.2.5':
     resolution: {integrity: sha512-lB05FkqEdUg2AA0xEbUz0SnkXT1LcCTa438W4IWTUh4hdOnVbQyOJ81OrDXsJk/LSiJHubgGEFoR5EHq1NsH1A==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@flypeng/tool@5.7.0':
+    resolution: {integrity: sha512-KVed3iCY9neAqZYdB2LQvo/U0uf3r5/gMI/2vu8DEfROAXsl5RGjFtLqXf67hgjTIlp17r7rmhdZIhq+Q2ZTNw==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -2218,6 +2234,19 @@ packages:
       vite: ^5.0.0 || ^6.0.0
       vue: ^3.2.25
 
+  '@vitepress-demo-preview/component@2.3.2':
+    resolution: {integrity: sha512-+GCYl3eHA7uoBGZyH2nTP1uab6pHFGEdykj5bSz4Nt2carH05xomBf18kBecuK1SncSqB7kWV/6JHT2Y349NbQ==}
+    peerDependencies:
+      vitepress: '*'
+      vue: ^3.2.0
+
+  '@vitepress-demo-preview/plugin@1.3.0':
+    resolution: {integrity: sha512-mP8Ni8/5eAlU4BMguWWBHZXyUJX/i7O1QL5iBXYsA61fZokJDKs95BosKuOViuzCABqx0/6UTmf75YF7y0jsBA==}
+    peerDependencies:
+      markdown-it-container: ^3.0.0
+      vitepress: '*'
+      vue: ^3.2.0
+
   '@vitest/coverage-v8@1.4.0':
     resolution: {integrity: sha512-4hDGyH1SvKpgZnIByr9LhGgCEuF9DKM34IBLCC/fVfy24Z3+PZ+Ii9hsVBsHvY1umM1aGPEjceRkzxCfcQ10wg==}
     peerDependencies:
@@ -3219,6 +3248,9 @@ packages:
   data-view-byte-offset@1.0.1:
     resolution: {integrity: sha512-BS8PfmtDGnrgYdOonGZQdLZslWIeCGFP9tpan0hi1Co2Zr2NKADsvGYA8XxuG/4UWgJ6Cjtv+YJnB6MM69QGlQ==}
     engines: {node: '>= 0.4'}
+
+  dayjs@1.11.13:
+    resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
 
   de-indent@1.0.2:
     resolution: {integrity: sha512-e/1zu3xH5MQryN2zdVaF0OrdNLUbvWxzMbi+iNA6Bky7l1RoP8a2fIbRocyHclXt/arDrrR6lL3TqFD9pMQTsg==}
@@ -4893,6 +4925,9 @@ packages:
 
   mark.js@8.11.1:
     resolution: {integrity: sha512-1I+1qpDt4idfgLQG+BNWmrqku+7/2bi5nLf4YwF8y8zXvmfiTBY3PV3ZibfrjBueCByROpuBjLLFCajqkgYoLQ==}
+
+  markdown-it-container@3.0.0:
+    resolution: {integrity: sha512-y6oKTq4BB9OQuY/KLfk/O3ysFhB3IMYoIWhGJEidXt1NQFocFK2sA2t0NYZAMyMShAGL6x5OPIbrmXPIqaN9rw==}
 
   markdown-it@14.1.0:
     resolution: {integrity: sha512-a54IwgWPaeBCAAsv13YgmALOF1elABB08FxO9i+r4VFk5Vl4pKokRPeX8u5TCgSsPi6ec1otfLjdOpVcgbpshg==}
@@ -7749,6 +7784,11 @@ snapshots:
       '@eslint/core': 0.10.0
       levn: 0.4.1
 
+  '@flypeng/tool@5.7.0':
+    dependencies:
+      dayjs: 1.11.13
+      lodash: 4.17.21
+
   '@humanfs/core@0.19.1': {}
 
   '@humanfs/node@0.16.6':
@@ -8953,6 +8993,19 @@ snapshots:
       vite: 6.2.0(@types/node@22.13.5)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.39.0)(yaml@2.7.0)
       vue: 3.5.13(typescript@5.7.3)
 
+  '@vitepress-demo-preview/component@2.3.2(vitepress@1.6.3(@algolia/client-search@5.20.3)(@types/node@22.13.5)(lightningcss@1.29.1)(postcss@8.5.3)(search-insights@2.17.3)(terser@5.39.0)(typescript@5.7.3))(vue@3.5.13(typescript@5.7.3))':
+    dependencies:
+      vitepress: 1.6.3(@algolia/client-search@5.20.3)(@types/node@22.13.5)(lightningcss@1.29.1)(postcss@8.5.3)(search-insights@2.17.3)(terser@5.39.0)(typescript@5.7.3)
+      vue: 3.5.13(typescript@5.7.3)
+
+  '@vitepress-demo-preview/plugin@1.3.0(markdown-it-container@3.0.0)(vitepress@1.6.3(@algolia/client-search@5.20.3)(@types/node@22.13.5)(lightningcss@1.29.1)(postcss@8.5.3)(search-insights@2.17.3)(terser@5.39.0)(typescript@5.7.3))(vue@3.5.13(typescript@5.7.3))':
+    dependencies:
+      '@flypeng/tool': 5.7.0
+      markdown-it: 14.1.0
+      markdown-it-container: 3.0.0
+      vitepress: 1.6.3(@algolia/client-search@5.20.3)(@types/node@22.13.5)(lightningcss@1.29.1)(postcss@8.5.3)(search-insights@2.17.3)(terser@5.39.0)(typescript@5.7.3)
+      vue: 3.5.13(typescript@5.7.3)
+
   '@vitest/coverage-v8@1.4.0(vitest@3.0.7(@types/node@22.13.5)(jiti@2.4.2)(jsdom@24.0.0)(lightningcss@1.29.1)(terser@5.39.0)(yaml@2.7.0))':
     dependencies:
       '@ampproject/remapping': 2.3.0
@@ -10155,6 +10208,8 @@ snapshots:
       call-bound: 1.0.3
       es-errors: 1.3.0
       is-data-view: 1.0.2
+
+  dayjs@1.11.13: {}
 
   de-indent@1.0.2: {}
 
@@ -12232,6 +12287,8 @@ snapshots:
       object-visit: 1.0.1
 
   mark.js@8.11.1: {}
+
+  markdown-it-container@3.0.0: {}
 
   markdown-it@14.1.0:
     dependencies:

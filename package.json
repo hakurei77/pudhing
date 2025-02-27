@@ -2,9 +2,9 @@
   "name": "pudhing-mono-test",
   "private": true,
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "dev:local": "turbo run dev:local",
+    "build": "turbo run build ",
+    "dev": "turbo run dev --filter=./apps/*",
+    "dev:local": "turbo run dev:local --filter=./apps/*",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",

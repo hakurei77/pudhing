@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col h-screen flex-1 items-center justify-center">
         <div class="flex items-center justify-center">
-            <ImgBox :scale="10" :src="pudhing" />
+            <pd-imgBox :scale="10" :src="pudhing" />
             <span class="ml-2 font-bold text-6xl">Pudhing</span>
         </div>
         <div class="flex">
@@ -13,21 +13,25 @@
                 <span class="text-sm">更多</span>
             </div>
         </div>
-        <SubmitButton />
+        <pd-button @click="handleSubmit"/>
     </div>
 </template>
 
 <script setup lang="ts">
 import pudhing from "@/assets/imgs/pudhing.png";
-import SubmitButton from "@/components/SubmitButton.vue";
 import MainChatAssistantSelect from "@/components/MainChatAssistantSelect.vue";
 import { useAssistantDataStore } from "@/store/assistantData";
+import { SubmitFunc } from '@/utils/submit';
+import type { SubmitData } from '@/utils/submit';
 const assistantDataStore = useAssistantDataStore();
 /**
- * 选择当前对话assistant
+ * 选择当前对话assistant/
 */
 const selectItem = (id: string) => {
     assistantDataStore.changeCurrentAssistant(id);
+};
+const handleSubmit = async ({ text, attachments }: SubmitData) => {
+    await SubmitFunc(text,attachments,assistantDataStore.currentId);
 };
 </script>
 

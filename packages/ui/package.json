@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "pnpm --filter @pudhing-ui/play dev",
-    "docs:dev": "pnpm --filter @pudhing-ui/docs dev",
-    "docs:build": "pnpm --filter @pudhing-ui/docs duild",
+    "dev": "pnpm run build && pnpm --filter @pudhing-ui/play dev",
+    "docs:dev": "pnpm run build && pnpm --filter @pudhing-ui/docs dev",
+    "docs:build": "pnpm run build && pnpm --filter @pudhing-ui/docs build",
     "test": "pnpm --filter @pudhing-ui/components test",
     "build": "pnpm --filter pudhing-ui build"
   },
@@ -33,6 +33,8 @@
     "vitest": "3.0.7",
     "vue-tsc": "2.2.4",
     "npm-run-all": "^4.1.5",
-    "rimraf": "^6.0.1"
+    "rimraf": "^6.0.1",
+    "eslint": "^9.18.0",
+    "@repo/eslint-config": "workspace:*"
   }
 }

@@ -8,9 +8,28 @@
 import { computed } from 'vue';
 import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
+
+defineOptions({
+    name: 'PdMarkdownParser'
+})
 const props = withDefaults(defineProps<{
     data: string;
-}>(),{});
+    primaryColor?: string;
+    succeedColor: string;
+    errorColor: string; 
+    aColor: string;
+    aColorHover: string;
+    aColorActive: string;
+    borderColor: string;
+}>(),{
+    primaryColor: "var(--pd-primary-color)",
+    succeedColor: "var(--pd-succeed-color)",
+    errorColor: "var(--pd-error-color)",
+    aColor: "var(--pd-a-color)",
+    aColorHover: "var(--pd-a-color-hover)",
+    aColorActive: "var(--pd-a-color-active)",
+    borderColor: "var(--pd-border-color)",
+});
 // 初始化 markdown-it 实例
 const md = new MarkdownIt({
     linkify: true,    // 自动识别 URL 为链接
@@ -67,15 +86,15 @@ const handleCopy = async (e: MouseEvent) => {
         try {
             await navigator.clipboard.writeText(codeContent);
             target.innerHTML = '复制成功';
-            target.parentElement.style.color = 'var(--succeed-color)';
+            target.parentElement.style.color = props.succeedColor;
             setTimeout(() => {
                 target.innerHTML = '复制';
-                target.parentElement!.style.color = 'var(--primary-color)';
+                target.parentElement!.style.color = props.primaryColor;
             }, 3000);
         } catch (err) {
             alert('复制失败:' + err);
             target.innerHTML = '复制失败';
-            target.parentElement.style.color = 'var(--error-color)';
+            target.parentElement.style.color = props.errorColor;
         }
     }
 };
@@ -84,7 +103,7 @@ const handleCopy = async (e: MouseEvent) => {
 <style scoped>
 :deep(h1) {
     font-size: 2em;
-    border-bottom: 1px solid #caced5;
+    border-bottom: 1px solid v-bind(borderColor);
     padding-bottom: 10px;
     font-weight: 600;
     margin-bottom: 6px;
@@ -92,7 +111,7 @@ const handleCopy = async (e: MouseEvent) => {
 }
 :deep(h2) {
     font-size: 1.5em;
-    border-bottom: 1px solid #caced5;
+    border-bottom: 1px solid v-bind(borderColor);
     padding-bottom: 10px;
     font-weight: 600;
     margin-bottom: 6px;
@@ -100,7 +119,7 @@ const handleCopy = async (e: MouseEvent) => {
 }
 :deep(h3) {
     font-size: 1.25em;
-    border-bottom: 1px solid #caced5;
+    border-bottom: 1px solid v-bind(borderColor);
     padding-bottom: 10px;
     font-weight: 600;
     margin-bottom: 6px;
@@ -117,16 +136,16 @@ const handleCopy = async (e: MouseEvent) => {
     margin: 0.5em 0;
 }
 :deep(a) {
-    color: #1a73e8;
+    color: v-bind(aColor);
     text-decoration: none;
     transition: color 0.3s ease; /* 添加颜色过渡动画 */
 }
 :deep(a):hover {
-    color: #1557b0;
+    color: v-bind(aColorHover);
     text-decoration: underline;
 }
 :deep(a):active {
-    color: #0f3d7a;
+    color: v-bind(aColorActive);
 }
 :deep(p) {
     margin-bottom: 8px;
@@ -136,6 +155,6 @@ const handleCopy = async (e: MouseEvent) => {
     overflow-wrap: break-word; /* 兼容性设置 */
 }
 :deep(.copy-area):hover {
-    color: var(--primary-color);
+    color: v-bind(primaryColor);
 }
 </style>

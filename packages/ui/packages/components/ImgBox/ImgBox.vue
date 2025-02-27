@@ -6,13 +6,15 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-
+defineOptions({
+    name: 'PdImgBox'
+})
 const props = withDefaults(defineProps<{
     scale: number;
     src: string;
 }>(),{});
 
-const baseSize = 10; // 基础大小
+const baseSize = 10; // 基础大小px
 const scaledSize = computed(() => {
     return baseSize * props.scale;
 });

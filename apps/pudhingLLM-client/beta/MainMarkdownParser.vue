@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div v-html="htmlContent" @click="handleCopy"></div>
 </template>
 
@@ -138,4 +138,4 @@ const handleCopy = async (e: MouseEvent) => {
 :deep(.copy-area):hover {
     color: var(--primary-color);
 }
-</style>
+</style> -->

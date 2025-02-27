@@ -1,7 +1,7 @@
 <template>
     <div :class="activeClass" class="flex items-center justify-center border-solid border-1 border-[var(--divided-line)] pt-1 pb-1 pl-2 pr-2 rounded-lg mr-2 cursor-pointer">
         <template v-if="img === ''">
-            <ImgBox :scale="2" :src="imgScr"/>
+            <pd-imgBox :scale="2" :src="imgScr"/>
         </template>
         <span class="ml-2">{{ text }}</span>
     </div>

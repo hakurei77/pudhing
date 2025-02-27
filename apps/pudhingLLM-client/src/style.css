@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import 'highlight.js/styles/tokyo-night-dark.css'; /* 代码高亮 */
 
 :root {
     --primary-color: #ffdd1f; /* 主色调 */

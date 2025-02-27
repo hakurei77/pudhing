@@ -1,5 +1,5 @@
 import { sendFormData, getAssistantList , getAssistantHistory } from "@/utils/request";
-
+const api= import.meta.env.VITE_APP_API_URL;
 // 定义文本类型的类型别名
 type TextItem = {
     type: 'text';
@@ -18,13 +18,13 @@ type DataFormat = {
     data: TextItem[] | ImageItem[]  
 };
 const getAssistantListApi = async () => {
-    return await getAssistantList("http://localhost:3000/api/getAssistantList");
+    return await getAssistantList(`${api}/getAssistantList`);
 };
 const sendFormDataApi = async (data: DataFormat) => {
-    return await sendFormData("http://localhost:3000/api/sendFormData", data);
+    return await sendFormData(`${api}/sendFormData`, data);
 };
 const getAssistantHistoryApi = async (data: string) => {
-    return await getAssistantHistory("http://localhost:3000/api/getAssistantHistoryData", data);
+    return await getAssistantHistory(`${api}/getAssistantHistoryData`, data);
 };
 
 

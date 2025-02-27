@@ -17,14 +17,14 @@
             <template v-if="item.role === 'assistant'">
                 <div class="w-[90%] mt-2 self-start text-justify text-sm">
                     <div class="flex items-center">
-                        <ImgBox :scale="2" :src="imgScr" />
+                        <pd-imgBox :scale="2" :src="imgScr" />
                         <span class="ml-2">小黑塔</span>
                         <SvgIcon class="ml-2 cursor-pointer" name="more" />
                     </div>
                     <div class="bg-[var(--background-gray)] rounded-xl p-4 mt-2">
                         <template v-for="(i, _) in item.contentList" :key="_">
                             <template v-if="i.type === 'text'">
-                                <MarkdownParser class="break-all" :data="i.text" />
+                                <PdMarkdownParser class="break-all" :data="i.text" />
                             </template>
                         </template>
                     </div>
@@ -38,7 +38,7 @@
 import miku from "@/assets/imgs/miku.png";
 import mikulogo from "@/assets/imgs/mikulogo.png";
 import imgScr from "@/assets/imgs/xiaoheita.png";
-import MarkdownParser from "@/components/MainMarkdownParser.vue";
+
 type User = {
     type: 'text';
     text: string;

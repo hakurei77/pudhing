@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div :style="{ width: scaledSize + 'px', height: scaledSize + 'px' }" class="overflow-hidden rounded-[30%]">
         <img :src="src" :style="{ width: '100%', height: '100%' }">
     </div>
@@ -18,4 +18,4 @@ const scaledSize = computed(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped></style> -->

@@ -4,22 +4,17 @@ layout: home
 
 hero:
   name: "Pudhing-ui"
-  text: "pudhing-llm大模型平台配套ui组件"
-  tagline: My great project tagline
+  text: "一个小型组件库"
+  tagline: pudhing项目配套ui组件库
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
-    - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: 从这里开始
+      link: /pudhing-ui/pd-ui
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: ✨ Pudhing-LLM
+    details: 应用与Pudhing-LLM平台相关的组件样式
+  - title: 🔧 Pudhing-other
+    details: 其他应用开发中...
 ---
 

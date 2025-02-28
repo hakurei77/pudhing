@@ -1,0 +1,29 @@
+name: Client CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+          
+      - name: Install Dependencies
+        working-directory: .
+        run: pnpm install
+      
+      # 添加测试步骤
+      - name: Run Tests
+        working-directory: ./apps/pudhingLLM-client
+        run: pnpm run test

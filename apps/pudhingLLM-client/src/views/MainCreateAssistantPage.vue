@@ -1,6 +1,7 @@
 <template>
     <!-- 新增外层flex布局容器 -->
     <div class="flex flex-col h-screen flex-1 items-center justify-center">
+        <SvgIcon name="list" :scale="1.5" class="ml-5 mt-5 cursor-pointer absolute left-0 top-0 lg:hidden" @click="openSidebar" />
         <div class="w-full max-w-md p-8 bg-white rounded-xl shadow-lg">
             <form @submit.prevent="handleSubmit" class="space-y-6">
                 <!-- 类型选择 -->
@@ -73,7 +74,6 @@
 import { ref } from 'vue';
 import { createAssistantApi } from "@/api/data";
 import { useRouter } from 'vue-router';  // 添加路由导入
-
 const router = useRouter();  // 获取路由实例
 interface FormData {
     type: string;
@@ -157,5 +157,10 @@ const handleSubmit = async () => {
     } catch (error) {
         alert('创建失败:' + error);
     }
+};
+import { useSidebarStateStore } from '@/store/sidebarState';
+const SidebarState = useSidebarStateStore();
+const openSidebar = () => {
+    SidebarState.value = true;
 };
 </script>

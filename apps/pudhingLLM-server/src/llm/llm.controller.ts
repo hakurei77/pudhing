@@ -22,4 +22,17 @@ export class LLMController {
     sendFormData(@Body() body: SendFormDataDto) {
         return this.llmService.sendFormData(body.assistantId, body.data)
     }
+
+    @Post("/api/createAssistant")
+    @HttpCode(200)
+    createAssistant(@Body() body: {
+        type: string;
+        name: string;
+        prompt: string;
+        description: string;
+        image: string;
+    }) {
+        return this.llmService.createAssistant(body);
+    }
+
 }

@@ -6,7 +6,7 @@
         </div>
         <div class="flex">
             <template v-for="item in assistantDataStore.data.slice(0,3)" :key="item.id">
-                <MainChatAssistantSelect :text="item.name" :id="item.id" @click="selectItem(item.id)"  />
+                <MainChatAssistantSelect :text="item.name" :id="item.id" :img="item.image" @click="selectItem(item.id)"  />
             </template>
             <div class="flex items-center cursor-pointer border-transparent hover:border-[var(--primary-color)] border-solid border-[2px] transition-colors rounded-lg p-1">
                 <SvgIcon name="box" class="mr-1"/>

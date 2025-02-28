@@ -71,7 +71,10 @@
 <script setup lang="ts">
 // 保持原来的script部分不变
 import { ref } from 'vue';
+import { createAssistantApi } from "@/api/data";
+import { useRouter } from 'vue-router';  // 添加路由导入
 
+const router = useRouter();  // 获取路由实例
 interface FormData {
     type: string;
     prompt: string;
@@ -93,7 +96,7 @@ const errorMessage = ref<string>('');
 const fileName = ref<string>('');
 const fileInput = ref<HTMLInputElement | null>(null);
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_FILE_SIZE = 1 * 1024 * 1024; // 5MB
 
 const handleImageUpload = (event: Event) => {
     errorMessage.value = '';
@@ -104,7 +107,7 @@ const handleImageUpload = (event: Event) => {
 
     // 检查文件大小
     if (file.size > MAX_FILE_SIZE) {
-        errorMessage.value = '文件大小不能超过5MB';
+        errorMessage.value = '文件大小不能超过1MB';
         formData.value.image = null;
         previewImage.value = null;
         fileName.value = '';
@@ -129,15 +132,30 @@ const handleImageUpload = (event: Event) => {
     reader.readAsDataURL(file);
 };
 
-const handleSubmit = () => {
-    if (formData.value.image) {
-        // console.log('提交数据:', {
-        //     ...formData.value,
-        //     // 如果只需要上传base64数据，可以在这里处理
-        //     image: formData.value.image.split(',')[1] // 移除data:URL前缀（可选）
-        // });
-    } else {
-        //console.log('提交数据:', formData.value);
+const handleSubmit = async () => {
+    try {
+        const requestData = {
+            type: formData.value.type,
+            name: formData.value.name,
+            prompt: formData.value.prompt,
+            description: formData.value.description,
+            image: formData.value.image ? formData.value.image.split(',')[1] : '' // 移除 base64 的前缀
+        };
+        await createAssistantApi(JSON.stringify(requestData));
+        formData.value = {
+            type: 'Doubao-DeepSeek-R1',
+            prompt: '',
+            name: '',
+            description: '',
+            image: null
+        };
+        // 清空相关状态
+        previewImage.value = null;
+        fileName.value = '';
+        if (fileInput.value) fileInput.value.value = '';
+        router.go(0); 
+    } catch (error) {
+        alert('创建失败:' + error);
     }
 };
 </script>

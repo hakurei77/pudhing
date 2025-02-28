@@ -10,21 +10,21 @@ export const constantRoute = [
             },
             {
                 path: 'chat',
-                component: () => import('@/components/MainChatPage.vue'),
+                component: () => import('@/views/MainChatPage.vue'),
             },
             {
                 path: "chat/:assistantId",
-                component: () => import('@/components/MainDialogPage.vue'),
+                component: () => import('@/views/MainDialogPage.vue'),
             },
             {
                 path: 'create',
-                component: () => import('@/components/MainCreateAssistantPage.vue'),
+                component: () => import('@/views/MainCreateAssistantPage.vue'),
             },
         ],
     },
     {
         path:'/404',
-        component:() => import('@/components/404Page.vue'),
+        component:() => import('@/views/404Page.vue'),
         name:'404',
     },
     {

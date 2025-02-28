@@ -17,8 +17,13 @@
             <template v-if="item.role === 'assistant'">
                 <div class="w-[90%] mt-2 self-start text-justify text-sm">
                     <div class="flex items-center">
-                        <pd-imgBox :scale="2" :src="imgScr" />
-                        <span class="ml-2">小黑塔</span>
+                        <template v-if="img === ''">
+                            <pd-imgBox :scale="2" :src="imgScr"/>
+                        </template>
+                        <template v-else>
+                            <pd-imgBox :scale="2" :src="getImageSrc"/>
+                        </template>
+                        <span class="ml-2">{{ name }}</span>
                         <SvgIcon class="ml-2 cursor-pointer" name="more" />
                     </div>
                     <div class="bg-[var(--background-gray)] rounded-xl p-4 mt-2">
@@ -37,8 +42,9 @@
 <script setup lang="ts">
 import miku from "@/assets/imgs/miku.png";
 import mikulogo from "@/assets/imgs/mikulogo.png";
-import imgScr from "@/assets/imgs/xiaoheita.png";
-
+import imgScr from "@/assets/imgs/pudhing.png";
+import { computed } from "vue";
+import { processImg } from "@/utils/processImg";
 type User = {
     type: 'text';
     text: string;
@@ -55,10 +61,19 @@ type HistoryData = {
     role: string,
     contentList: ContentList[]
 };
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
     historyDataList: HistoryData[];
-}>(), {});
-
+    name: string;
+    img: string;
+}>(), {
+    img: ''
+});
+/**
+ * 处理图片
+*/
+const getImageSrc = computed(() => {
+    return processImg(props.img);
+});
 </script>
 
 <style scoped></style>

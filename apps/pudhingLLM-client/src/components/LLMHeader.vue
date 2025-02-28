@@ -5,6 +5,9 @@
             <template v-if="img === ''">
                 <pd-imgBox :scale="3.5" :src="pudhing" class="ml-5" />
             </template>
+            <template v-else>
+                <pd-imgBox :scale="3.5" :src="getImageSrc" class="ml-5" />
+            </template>
             <span class="ml-2 font-bold">{{ name }}</span>
         </div>
     </template>
@@ -19,7 +22,9 @@
 
 <script setup lang="ts">
 import pudhing from "@/assets/imgs/pudhing.png";
-withDefaults(defineProps<{
+import { computed } from "vue";
+import { processImg } from "@/utils/processImg";
+const props = withDefaults(defineProps<{
     name?: string,
     img?: string
     type?: string
@@ -34,7 +39,12 @@ const emit = defineEmits(['click']);
 const handleClick = () => {
     emit('click'); // 改为 'click' 事件
 };
-
+/**
+ * 处理图片
+*/
+const getImageSrc = computed(() => {
+    return processImg(props.img);
+});
 </script>
 
 <style scoped></style>

@@ -96,8 +96,32 @@ const getAssistantHistory = async (url: string, data: string) => {
     }
 };
 
+const createAssistant = async (url: string, data: string) => {
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: data
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+        
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        alert('创建助手失败：' + error);
+        throw error;
+    }
+};
+
+
 export {
     sendFormData,
     getAssistantList,
-    getAssistantHistory
+    getAssistantHistory,
+    createAssistant
 };

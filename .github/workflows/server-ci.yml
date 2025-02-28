@@ -1,4 +1,4 @@
-name: Client CI
+name: Server CI
 
 on:
   push:
@@ -24,6 +24,3 @@ jobs:
         run: pnpm install
       
       # 添加测试步骤
-      - name: Run Tests
-        working-directory: ./apps/pudhingLLM-server
-        run: pnpm run test

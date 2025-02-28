@@ -86,12 +86,25 @@ export class LLMService {
             API_URL
         }
     }
+    private messageHistory: Array<{ role: string; content: any }> = [];
     createChatRequestData = (MODEL: string, prompt: string, formData: MessageDataDto[]) => {
+        const textContent = formData
+            .filter(item => item.type === 'text')
+            .map(item => (item as any).text)
+            .join('');
+            
+        if (textContent.length <= 100) {
+            this.messageHistory.push({ role: 'user', content: formData });
+        }
+        
+        if (this.messageHistory.length > 10) {
+            this.messageHistory = this.messageHistory.slice(-10);
+        }
         return {
             model: MODEL,
             messages: [
                 { role: 'system', content: prompt },
-                { role: 'user', content: formData }
+                ...this.messageHistory
             ],
             stream: true
         };
@@ -218,7 +231,6 @@ export class LLMService {
     }) {
         try {
             console.log('创建助手的数据:', data);
-            
             const assistant = await this.prisma.assistant.create({
                 data: {
                     id: uuidv4(), // 生成唯一ID
@@ -230,7 +242,6 @@ export class LLMService {
                     isDelete: false
                 }
             });
-    
             return {
                 message: '创建成功',
                 data: assistant

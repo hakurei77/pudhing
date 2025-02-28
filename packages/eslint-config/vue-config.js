@@ -6,7 +6,10 @@ import pluginVue from "eslint-plugin-vue"; // 导入 Vue ESLint 插件
 /** @type {import('eslint').Linter.Config[]} */
 export const config = [
     {
-        ignores: ["**/*.test.ts"],
+        ignores: [
+            "**/*.test.ts",
+            "src/__test__/**/*.ts"  // 添加此行以忽略测试目录
+        ],
         // 适用于所有 JavaScript、TypeScript 和 Vue 文件
         files: ["**/*.{ts,vue}"],
         rules: { 
@@ -30,7 +33,13 @@ export const config = [
         }
     },
     pluginJs.configs.recommended, // 使用 JavaScript 插件的推荐配置
-    ...tseslint.configs.recommended, // 使用 TypeScript 插件的推荐配置
+    {
+        ignores: [
+            "**/*.test.ts",
+            "src/__test__/**/*.ts"  // 添加此行以忽略测试目录
+        ],
+        ...tseslint.configs.recommended, // 使用 TypeScript 插件的推荐配置
+    },
     ...pluginVue.configs["flat/essential"], // 使用 Vue 插件的基本配置
     {
         // 针对 Vue 文件的特定配置

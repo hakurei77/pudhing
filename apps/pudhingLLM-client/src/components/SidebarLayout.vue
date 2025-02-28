@@ -43,7 +43,7 @@
         </div>
         <template v-for="item in assistantDataStore.data" :key="item.id">
             <RouterLink :to="`/chat/${item.id}`" @click="changeAssistant(item.id)">
-                <SidebarAssistantIntroduction :type="item.type" :description="item.description" :name="item.name" :id="item.id" />
+                <SidebarAssistantIntroduction :type="item.type" :description="item.description" :name="item.name" :id="item.id" :img="item.image" />
             </RouterLink>
         </template>
     </div>

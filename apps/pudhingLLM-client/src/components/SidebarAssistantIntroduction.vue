@@ -3,6 +3,9 @@
         <template v-if="img === ''">
             <pd-imgBox class="mr-2 flex-shrink-0" :scale="4" :src="imgScr"/>
         </template>
+        <template v-else>
+            <pd-imgBox class="mr-2 flex-shrink-0" :scale="4" :src="getImageSrc"/>
+        </template>
         <div class="flex flex-col overflow-hidden text-ellipsis">
             <span class="text-xs truncate text-[var(--background-text-gray)]">{{ type }}</span>
             <span class="truncate mt-2 mb-1">{{ name }}</span>
@@ -14,6 +17,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useRoute } from 'vue-router';
+import { processImg } from "@/utils/processImg";
 import imgScr from "@/assets/imgs/pudhing.png";
 const route = useRoute();
 const props = withDefaults(defineProps<{
@@ -39,6 +43,12 @@ const activeClass = computed(() => {
     return {
         'bg-[var(--background-gray)]': props.id === routeId.value,
     };
+});
+/**
+ * 处理图片
+*/
+const getImageSrc = computed(() => {
+    return processImg(props.img);
 });
 </script>
 

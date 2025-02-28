@@ -1,12 +1,18 @@
 <template>
     <div class="flex flex-col h-screen flex-1">
-        <LLMHeader class="flex-shrink-0" :name="assistantDataStore.getCurrentAssistant(assistantDataStore.currentId)!.name" @click="openSidebar" />
+        <LLMHeader class="flex-shrink-0"
+                   :name="assistantDataStore.getCurrentAssistant(assistantDataStore.currentId)!.name"
+                   :img="assistantDataStore.getCurrentAssistant(assistantDataStore.currentId)!.image" @click="openSidebar" />
         <div class="flex overflow-auto overflow-x-hidden flex-col items-center w-full p-6 flex-1" ref="scrollContainer">
             <MainCharacterIntroduction
                 :name="assistantDataStore.getCurrentAssistant(assistantDataStore.currentId)!.name"
                 :description="assistantDataStore.getCurrentAssistant(assistantDataStore.currentId)!.description"
+                :img="assistantDataStore.getCurrentAssistant(assistantDataStore.currentId)!.image"
                 class="max-w-[800px]" />
-            <MainDialogBox class="max-w-[800px]" :historyDataList="assistantDataStore.getCurrentAssistant(assistantDataStore.currentId)!.histories" />
+            <MainDialogBox class="max-w-[800px]"
+                           :historyDataList="assistantDataStore.getCurrentAssistant(assistantDataStore.currentId)!.histories"
+                           :name="assistantDataStore.getCurrentAssistant(assistantDataStore.currentId)!.name"
+                           :img="assistantDataStore.getCurrentAssistant(assistantDataStore.currentId)!.image" />
         </div>
         <pd-button @click="handleSubmit" :isLoading="isLoading" />
     </div>
@@ -14,9 +20,9 @@
 
 <script setup lang="ts">
 import { ref, nextTick, onMounted } from 'vue';
-import LLMHeader from './LLMHeader.vue';
-import MainCharacterIntroduction from './MainCharacterIntroduction.vue';
-import MainDialogBox from './MainDialogBox.vue';
+import LLMHeader from '@/components/LLMHeader.vue';
+import MainCharacterIntroduction from '@/components/MainCharacterIntroduction.vue';
+import MainDialogBox from '@/components/MainDialogBox.vue';
 import { useSidebarStateStore } from '@/store/sidebarState';
 import { useAssistantDataStore } from "@/store/assistantData";
 
@@ -45,7 +51,7 @@ const isLoading = ref(false);
 const handleSubmit = async ({ text, attachments }: SubmitData) => {
     isLoading.value = true;
     ScrollToBottom();
-    isLoading.value = await SubmitFunc(text,attachments,assistantDataStore.currentId);
+    isLoading.value = await SubmitFunc(text, attachments, assistantDataStore.currentId);
 };
 onMounted(() => {
     ScrollToBottom();

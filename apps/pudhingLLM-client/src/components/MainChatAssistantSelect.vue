@@ -3,6 +3,9 @@
         <template v-if="img === ''">
             <pd-imgBox :scale="2" :src="imgScr"/>
         </template>
+        <template v-else>
+            <pd-imgBox :scale="2" :src="getImageSrc"/>
+        </template>
         <span class="ml-2">{{ text }}</span>
     </div>
 </template>
@@ -11,6 +14,7 @@
 import { computed } from "vue";
 import imgScr from "@/assets/imgs/pudhing.png";
 import { useAssistantDataStore } from "@/store/assistantData";
+import { processImg } from "@/utils/processImg";
 const assistantDataStore = useAssistantDataStore();
 const props = withDefaults(defineProps<{
     id?: string,
@@ -28,6 +32,12 @@ const activeClass = computed(() => {
         'border-[var(--primary-color)]': props.id === assistantDataStore.currentId,
         'border-[var(--divided-line)]': props.id !== assistantDataStore.currentId  
     };
+});
+/**
+ * 处理图片
+*/
+const getImageSrc = computed(() => {
+    return processImg(props.img);
 });
 </script>
 

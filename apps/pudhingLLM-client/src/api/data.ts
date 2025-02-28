@@ -1,4 +1,4 @@
-import { sendFormData, getAssistantList , getAssistantHistory } from "@/utils/request";
+import { sendFormData, getAssistantList , getAssistantHistory,createAssistant } from "@/utils/request";
 const api= import.meta.env.VITE_APP_API_URL;
 // 定义文本类型的类型别名
 type TextItem = {
@@ -26,10 +26,14 @@ const sendFormDataApi = async (data: DataFormat) => {
 const getAssistantHistoryApi = async (data: string) => {
     return await getAssistantHistory(`${api}/getAssistantHistoryData`, data);
 };
+const createAssistantApi = async (data: string) => {
+    return await createAssistant(`${api}/createAssistant`, data);
+};
 
 
 export { 
     sendFormDataApi,
     getAssistantListApi,
-    getAssistantHistoryApi 
+    getAssistantHistoryApi,
+    createAssistantApi
 };

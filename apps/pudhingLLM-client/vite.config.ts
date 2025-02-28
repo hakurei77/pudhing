@@ -23,7 +23,11 @@ export default defineConfig(() => {
             }
         },
         test: {
-            environment: "jsdom"
+            environment: "jsdom",
+            coverage: {
+                include: ['src/components/**/*.{js,jsx,ts,tsx,vue}'],
+                exclude: ['src/components/**/*.{test,spec}.{js,jsx,ts,tsx}']
+            }
         }
     };
 });

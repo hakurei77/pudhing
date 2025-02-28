@@ -1,6 +1,6 @@
 <template>
     <template v-if="type === 'header'">
-        <div v-bind="$attrs" class="flex bg-[var(--background-gray)] w-full h-[50px] items-center border-b-[1px] border-solid border-[var(--divided-line)]">
+        <div class="flex bg-[var(--background-gray)] w-full h-[50px] items-center border-b-[1px] border-solid border-[var(--divided-line)]">
             <SvgIcon name="list" :scale="1.5" class="ml-5 cursor-pointer lg:hidden" @click="handleClick" />
             <template v-if="img === ''">
                 <pd-imgBox :scale="3.5" :src="pudhing" class="ml-5" />
@@ -9,10 +9,11 @@
                 <pd-imgBox :scale="3.5" :src="getImageSrc" class="ml-5" />
             </template>
             <span class="ml-2 font-bold">{{ name }}</span>
+            <InlineButton class="absolute right-0 mr-20"/>
         </div>
     </template>
     <template v-if="type === 'sidebar'">
-        <div v-bind="$attrs" class="flex bg-[var(--background-gray)] w-full h-[50px] items-center border-b-[1px] border-solid border-[var(--divided-line)]">
+        <div class="flex bg-[var(--background-gray)] w-full h-[50px] items-center border-b-[1px] border-solid border-[var(--divided-line)]">
             <pd-imgBox :scale="3.5" :src="pudhing" class="ml-5" />
             <span class="ml-2 font-bold">Pudhing</span>
         </div>
@@ -24,6 +25,7 @@
 import pudhing from "@/assets/imgs/pudhing.png";
 import { computed } from "vue";
 import { processImg } from "@/utils/processImg";
+import InlineButton from "./InlineButton.vue";
 const props = withDefaults(defineProps<{
     name?: string,
     img?: string
@@ -45,6 +47,7 @@ const handleClick = () => {
 const getImageSrc = computed(() => {
     return processImg(props.img);
 });
+
 </script>
 
 <style scoped></style>

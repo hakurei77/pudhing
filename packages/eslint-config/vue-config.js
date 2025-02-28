@@ -6,6 +6,7 @@ import pluginVue from "eslint-plugin-vue"; // 导入 Vue ESLint 插件
 /** @type {import('eslint').Linter.Config[]} */
 export const config = [
     {
+        ignores: ["**/*.test.ts"],
         // 适用于所有 JavaScript、TypeScript 和 Vue 文件
         files: ["**/*.{ts,vue}"],
         rules: { 

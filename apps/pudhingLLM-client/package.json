@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "fix": "eslint . --fix",
     "test": "vitest --run",
+    "coverage": "vitest run --coverage",
     "lint-staged": "lint-staged"
   },
   "dependencies": {
@@ -36,7 +37,10 @@
     "vite": "^6.0.5",
     "vite-plugin-svg-icons": "^2.0.1",
     "vitest": "^3.0.3",
-    "vue-tsc": "^2.2.0"
+    "vue-tsc": "^2.2.0",
+    "@vitest/coverage-v8": "^3.0.7",
+    "@vitejs/plugin-vue-jsx": "^4.1.1",
+    "unplugin-vue-macros": "^2.14.5"
   },
   "lint-staged": {
     "*.{ts,jsx,vue}": [

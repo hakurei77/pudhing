@@ -10,6 +10,9 @@
                             <template v-if="i.type === 'text'">
                                 <span class="break-all whitespace-break-spaces">{{ i.text }}</span>
                             </template>
+                            <template v-if="i.type === 'image_url'">
+                                <pd-imgBox :scale="8" :src="i.image_url.url"/>
+                            </template>
                         </template>
                     </div>
                 </div>

@@ -31,7 +31,7 @@ import type { SubmitData } from '@/utils/submit';
 const assistantDataStore = useAssistantDataStore();
 const SidebarState = useSidebarStateStore();
 /**
- * 此函数用于修改侧边栏状态
+ * 此函数用于修改侧边栏状态/
 */
 const openSidebar = () => {
     SidebarState.value = true;

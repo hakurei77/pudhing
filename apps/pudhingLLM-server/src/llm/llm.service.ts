@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { MessageDataDto } from './dto/data';
 import { Observable , map } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
 @Injectable()
 export class LLMService {
     constructor(private prisma: PrismaService) { }
@@ -207,5 +208,36 @@ export class LLMService {
         const { TOKEN, MODEL, API_URL } = this.modelSelect(assistant?.type as string)
         const requestData = this.createChatRequestData(MODEL, assistant?.prompt as string, formData)
         return this.createChatCompletion(requestData, API_URL, TOKEN , assistantId);
+    }
+    async createAssistant(data: {
+        type: string;
+        name: string;
+        prompt: string;
+        description: string;
+        image: string;
+    }) {
+        try {
+            console.log('创建助手的数据:', data);
+            
+            const assistant = await this.prisma.assistant.create({
+                data: {
+                    id: uuidv4(), // 生成唯一ID
+                    type: data.type,
+                    name: data.name,
+                    prompt: data.prompt,
+                    description: data.description,
+                    image: data.image,
+                    isDelete: false
+                }
+            });
+    
+            return {
+                message: '创建成功',
+                data: assistant
+            };
+        } catch (error) {
+            console.error('创建助手失败:', error);
+            throw new Error('创建助手失败: ' + error.message);
+        }
     }
 }

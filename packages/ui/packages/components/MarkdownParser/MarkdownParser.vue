@@ -80,38 +80,50 @@ md.renderer.rules.strong_open = () => {
 const htmlContent = computed(() => md.render(props.data));
 const handleCopy = async (e: MouseEvent) => {
     const target = e.target as HTMLElement;
-    // 优化选择器逻辑，处理事件冒泡
-    const copyButton = target.closest('.copy-area');
-    if (!copyButton) return;
+    if (target.parentElement?.classList.contains('copy-area')) {
+        const codeBlock = target.parentElement.parentElement?.nextElementSibling?.querySelector('pre code') as HTMLElement | null;
+        const codeContent = codeBlock?.textContent || '';
+        const copyButton = target.querySelector('.copy') as HTMLElement;
 
-    // 查找最近的代码块容器
-    const container = copyButton.closest('.hljs')?.nextElementSibling;
-    if (!container) return;
+        try {
+            // 优先使用现代 Clipboard API
+            if (navigator.clipboard) {
+                await navigator.clipboard.writeText(codeContent);
+            } else {
+                // 兼容旧浏览器的 execCommand 方式
+                const textArea = document.createElement('textarea');
+                textArea.value = codeContent;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+            }
 
-    const codeBlock = container.querySelector('code');
-    if (!codeBlock) return;
-
-    const codeContent = codeBlock.textContent || '';
-    
-    try {
-        await navigator.clipboard.writeText(codeContent);
-        // 更新复制按钮文本
-        const copyText = copyButton.querySelector('.copy');
-        if (copyText) {
-            copyText.textContent = '复制成功';
-            copyButton.setAttribute('style', `color: ${props.succeedColor}`);
+            // 复制成功样式
+            copyButton.innerText = '复制成功';
+            target.parentElement.style.color = props.succeedColor;
             
             setTimeout(() => {
-                copyText.textContent = '复制';
-                copyButton.setAttribute('style', `color: ${props.primaryColor}`);
-            }, 3000);
-        }
-    } catch (err) {
-        console.error('复制失败:', err);
-        const copyText = copyButton.querySelector('.copy');
-        if (copyText) {
-            copyText.textContent = '复制失败';
-            copyButton.setAttribute('style', `color: ${props.errorColor}`);
+                copyButton.innerText = '复制';
+                target.parentElement!.style.color = props.primaryColor;
+            }, 2000);
+
+        } catch (err) {
+            // 处理复制失败
+            console.error('复制失败:', err);
+            copyButton.innerText = '复制失败';
+            target.parentElement.style.color = props.errorColor;
+            
+            // 失败后恢复原状的延迟可以稍短
+            setTimeout(() => {
+                copyButton.innerText = '复制';
+                target.parentElement!.style.color = props.primaryColor;
+            }, 1500);
+            
+            // 非 HTTPS 环境下提示手动复制
+            if (!window.isSecureContext) {
+                alert('当前环境不安全，请手动复制内容：\n\n' + codeContent);
+            }
         }
     }
 };

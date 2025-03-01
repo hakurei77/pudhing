@@ -83,18 +83,47 @@ const handleCopy = async (e: MouseEvent) => {
     if (target.parentElement?.classList.contains('copy-area')) {
         const codeBlock = target.parentElement.parentElement?.nextElementSibling?.querySelector('pre code') as HTMLElement | null;
         const codeContent = codeBlock?.textContent || '';
+        const copyButton = target.querySelector('.copy') as HTMLElement;
+
         try {
-            await navigator.clipboard.writeText(codeContent);
-            target.innerHTML = '复制成功';
+            // 优先使用现代 Clipboard API
+            if (navigator.clipboard) {
+                await navigator.clipboard.writeText(codeContent);
+            } else {
+                // 兼容旧浏览器的 execCommand 方式
+                const textArea = document.createElement('textarea');
+                textArea.value = codeContent;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+            }
+
+            // 复制成功样式
+            copyButton.innerText = '复制成功';
             target.parentElement.style.color = props.succeedColor;
+            
             setTimeout(() => {
-                target.innerHTML = '复制';
+                copyButton.innerText = '复制';
                 target.parentElement!.style.color = props.primaryColor;
-            }, 3000);
+            }, 2000);
+
         } catch (err) {
-            alert('复制失败:' + err);
-            target.innerHTML = '复制失败';
+            // 处理复制失败
+            console.error('复制失败:', err);
+            copyButton.innerText = '复制失败';
             target.parentElement.style.color = props.errorColor;
+            
+            // 失败后恢复原状的延迟可以稍短
+            setTimeout(() => {
+                copyButton.innerText = '复制';
+                target.parentElement!.style.color = props.primaryColor;
+            }, 1500);
+            
+            // 非 HTTPS 环境下提示手动复制
+            if (!window.isSecureContext) {
+                alert('当前环境不安全，请手动复制内容：\n\n' + codeContent);
+            }
         }
     }
 };

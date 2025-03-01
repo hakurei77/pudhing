@@ -1,5 +1,5 @@
 <template>
-    <div v-html="htmlContent" @click="handleCopy"></div>
+    <div class="markdown-container" v-html="htmlContent" @click="handleCopy"></div>
 </template>
 
 <script setup lang="ts">

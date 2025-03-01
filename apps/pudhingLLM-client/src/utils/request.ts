@@ -3,7 +3,7 @@ type TextItem = {
     type: 'text';
     text: string;
 };
-// 定义图片 URL 类型的类型别名
+// 定义图片URL类型的类型别名
 type ImageItem = {
     type: 'image_url';
     image_url: {
@@ -16,7 +16,7 @@ type DataFormat = {
     data: TextItem[] | ImageItem[]
 };
 /**
- * 获取assistant基础数据
+ * 获取assistant基础数据/
 */
 const getAssistantList = async (url: string) => {
     try {

@@ -1,5 +1,9 @@
-这是一个后端 + 数据库项目
+# Pudhing-server
 
-pnpm run migrate:local //执行本地迁移
-pnpm run seed:loacl //执行本地种子填充
- 
+## 技术栈
+- 后端服务：Nest.js + Prisma
+
+
+
+
+

@@ -1,84 +1,111 @@
-# Turborepo starter
+# Pudhing Project
 
-This Turborepo starter is maintained by the Turborepo core team.
+这是一个基于 Turborepo 构建的大语言模型应用项目，采用 monorepo 架构进行管理。
 
-## Using this example
+## 项目结构
 
-Run the following command:
-
-```sh
-npx create-turbo@latest
+```plaintext
+Pudhing/
+├── apps/                    # 应用程序
+│   ├── pudhingLLM-client/  # 前端应用
+│   └── pudhingLLM-server/  # 后端服务
+└── packages/               # 共享包
+    ├── ui/                # UI 组件库
+    └─── eslint-config/    # ESLint 配置
 ```
 
-## What's inside?
+## 技术栈
 
-This Turborepo includes the following packages/apps:
+### ✨前端 (pudhingLLM-client)
 
-### Apps and Packages
+- Vue3 + Vite
+- Pinia 状态管理
+- Tailwind CSS
+- Vitest 单元测试
+- ESLint + Husky + lint-staged
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### ⚙️后端 (pudhingLLM-server)
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+- Nest.js + Prisma
+- ESLint + Husky + lint-staged
+- 数据库 (MySQL)
 
-### Utilities
+## 快速开始
 
-This Turborepo has some additional tools already setup for you:
+### 环境要求
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+- Node.js >= 16.0.0
+- pnpm 包管理器
 
-### Build
+### 安装依赖
+```bash
+pnpm install
+ ```
 
-To build all apps and packages, run the following command:
-
+### 配置env
+#### 前端
+```bash
+cp .env.development
+cp .env.production
 ```
-cd my-turborepo
-pnpm build
-```
+#### 样例
 
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
+```env
+NODE_ENV='development'
+VITE_APP_API_URL='http://localhost:****/****'
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+#### 后端
+```bash
+cp .env.development
+cp .env.production
+```
+#### 样例
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+```env
+NODE_ENV="development"
+DATABASE_URL="mysql://root:******@localhost:****/****"
+
+Doubao_DeepSeek_R1_TOKEN="********" //大模型token
+Doubao_DeepSeek_R1_MODEL="********" //大模型model
+Doubao_DeepSeek_R1_API_URL="******" //大模型api
+
+DeepSeek_R1_TOKEN="*******"
+DeepSeek_R1_API_URL="*****"
+DeepSeek_R1_MODEL="*******"
+```
+### 数据库迁移(进入到app/pudhingLLM-server目录下)
+```bash
+pnpm run migrate:local
 
 ```
-npx turbo link
+### 启动项目
+
+#### turbo
+```bash
+pnpm run dev   //同时运行前端、后端、ui组件库
+pnpm run dev:local   //同时运行前端（本地）、后端（本地）
 ```
 
-## Useful Links
+#### 前端
+```bash
+pnpm run dev    //执行--production.env
+pnpm run dev:local    //执行--development.env
+```
 
-Learn more about the power of Turborepo:
+#### 后端
+默认端口号为：7422
+```bash
+pnpm run dev    //执行--production.env
+pnpm run dev:local    //执行--development.env
+```
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+#### ui组件库
+```bash
+pnpm run dev    //执行组件试验田
+pnpm doce:dev   //执行组件文档
+```
+
+## 贡献
+
+欢迎提交 Pull Request 或 Issue，共同改进项目。

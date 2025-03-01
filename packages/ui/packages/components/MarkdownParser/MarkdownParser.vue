@@ -1,5 +1,5 @@
 <template>
-    <div v-html="htmlContent" @click="handleCopy"></div>
+    <div class="markdown-container" v-html="htmlContent" @click="handleCopy"></div>
 </template>
 
 <script setup lang="ts">
@@ -80,21 +80,38 @@ md.renderer.rules.strong_open = () => {
 const htmlContent = computed(() => md.render(props.data));
 const handleCopy = async (e: MouseEvent) => {
     const target = e.target as HTMLElement;
-    if (target.parentElement?.classList.contains('copy-area')) {
-        const codeBlock = target.parentElement.parentElement?.nextElementSibling?.querySelector('pre code') as HTMLElement | null;
-        const codeContent = codeBlock?.textContent || '';
-        try {
-            await navigator.clipboard.writeText(codeContent);
-            target.innerHTML = '复制成功';
-            target.parentElement.style.color = props.succeedColor;
+    // 优化选择器逻辑，处理事件冒泡
+    const copyButton = target.closest('.copy-area');
+    if (!copyButton) return;
+
+    // 查找最近的代码块容器
+    const container = copyButton.closest('.hljs')?.nextElementSibling;
+    if (!container) return;
+
+    const codeBlock = container.querySelector('code');
+    if (!codeBlock) return;
+
+    const codeContent = codeBlock.textContent || '';
+    
+    try {
+        await navigator.clipboard.writeText(codeContent);
+        // 更新复制按钮文本
+        const copyText = copyButton.querySelector('.copy');
+        if (copyText) {
+            copyText.textContent = '复制成功';
+            copyButton.setAttribute('style', `color: ${props.succeedColor}`);
+            
             setTimeout(() => {
-                target.innerHTML = '复制';
-                target.parentElement!.style.color = props.primaryColor;
+                copyText.textContent = '复制';
+                copyButton.setAttribute('style', `color: ${props.primaryColor}`);
             }, 3000);
-        } catch (err) {
-            alert('复制失败:' + err);
-            target.innerHTML = '复制失败';
-            target.parentElement.style.color = props.errorColor;
+        }
+    } catch (err) {
+        console.error('复制失败:', err);
+        const copyText = copyButton.querySelector('.copy');
+        if (copyText) {
+            copyText.textContent = '复制失败';
+            copyButton.setAttribute('style', `color: ${props.errorColor}`);
         }
     }
 };

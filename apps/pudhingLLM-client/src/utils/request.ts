@@ -10,7 +10,7 @@ type ImageItem = {
         url: string;
     };
 };
-// 定义整个数据格式的类型别名
+// 定义整个数据格式的类型别名/
 type DataFormat = {
     assistantId: string;
     data: TextItem[] | ImageItem[]

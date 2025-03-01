@@ -1,16 +1,16 @@
 {
   "name": "pudhing-ui",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This is a ui for pudhing-project",
   "type": "module",
   "module": "./dist/es/index.js",
   "types": "./dist/types/core/index.d.ts",
   "exports": {
-    ".":{
+    ".": {
       "import": "./dist/es/index.js",
       "types": "./dist/types/core/index.d.ts"
     },
-    "./dist/":{
+    "./dist/": {
       "import": "./dist/"
     }
   },

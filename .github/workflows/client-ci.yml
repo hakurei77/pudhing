@@ -26,4 +26,14 @@ jobs:
       # 添加测试步骤
       - name: Run Tests
         working-directory: ./apps/pudhingLLM-client
-        run: pnpm run test
+        run: pnpm run coverage
+
+      # 上传覆盖率报告到 Codecov
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./apps/pudhingLLM-client/coverage
+          flags: unittests
+          name: client-coverage
+          fail_ci_if_error: true

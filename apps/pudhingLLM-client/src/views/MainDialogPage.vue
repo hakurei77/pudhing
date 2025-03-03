@@ -1,7 +1,6 @@
 <template>
     <div class="flex flex-col h-screen flex-1">
-        <LLMHeader class="flex-shrink-0"
-                   :name="assistantDataStore.getCurrentAssistant(assistantDataStore.currentId)!.name"
+        <LLMHeader :name="assistantDataStore.getCurrentAssistant(assistantDataStore.currentId)!.name"
                    :img="assistantDataStore.getCurrentAssistant(assistantDataStore.currentId)!.image" @click="openSidebar" />
         <div class="flex overflow-auto overflow-x-hidden flex-col items-center w-full p-6 flex-1" ref="scrollContainer">
             <MainCharacterIntroduction
@@ -30,6 +29,8 @@ import { SubmitFunc } from '@/utils/submit';
 import type { SubmitData } from '@/utils/submit';
 const assistantDataStore = useAssistantDataStore();
 const SidebarState = useSidebarStateStore();
+
+
 /**
  * 此函数用于修改侧边栏状态/
 */

@@ -1,0 +1,59 @@
+name: Client Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/pudhingLLM-client/**'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      VITE_APP_API_URL: ${{ secrets.VITE_APP_API_URL }} 
+      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+          
+      - name: Install Dependencies
+        working-directory: .
+        run: pnpm install
+      
+      - name: Create env file
+        working-directory: ./apps/pudhingLLM-client
+        run: |
+          echo "VITE_APP_API_URL=${{ secrets.VITE_APP_API_URL }}" > .env.production
+
+      - name: Build Workspace Dependencies
+        working-directory: ./packages/ui
+        run: pnpm run build
+
+      - name: Build Application
+        working-directory: ./apps/pudhingLLM-client
+        run: pnpm run build
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v2.0
+        with:
+          publish-dir: './apps/pudhingLLM-client/dist'
+          production-branch: main
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions"
+          enable-pull-request-comment: true
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 1

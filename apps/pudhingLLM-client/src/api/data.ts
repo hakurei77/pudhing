@@ -17,17 +17,25 @@ type DataFormat = {
     assistantId: string;
     data: TextItem[] | ImageItem[]  
 };
+
+const API_ROUTES = {
+    GET_ASSISTANT_LIST: `${api}/getAssistantList`,
+    SEND_FORM_DATA: `${api}/sendFormData`,
+    GET_ASSISTANT_HISTORY: `${api}/getAssistantHistoryData`,
+    CREATE_ASSISTANT: `${api}/createAssistant`,
+} as const;
+
 const getAssistantListApi = async () => {
-    return await getAssistantList(`${api}/getAssistantList`);
+    return await getAssistantList(API_ROUTES.GET_ASSISTANT_LIST);
 };
 const sendFormDataApi = async (data: DataFormat) => {
-    return await sendFormData(`${api}/sendFormData`, data);
+    return await sendFormData(API_ROUTES.SEND_FORM_DATA, data);
 };
 const getAssistantHistoryApi = async (data: string) => {
-    return await getAssistantHistory(`${api}/getAssistantHistoryData`, data);
+    return await getAssistantHistory(API_ROUTES.GET_ASSISTANT_HISTORY, data);
 };
 const createAssistantApi = async (data: string) => {
-    return await createAssistant(`${api}/createAssistant`, data);
+    return await createAssistant(API_ROUTES.CREATE_ASSISTANT, data);
 };
 
 

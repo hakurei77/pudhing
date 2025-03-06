@@ -1,0 +1,19 @@
+{
+  "name": "prisma-converter",
+  "version": "1.0.0",
+  "description": "Prisma 数据转换工具",
+  "scripts": {
+    "dev": "ts-node index.ts"
+  },
+  "keywords": ["prisma", "converter", "tool"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/internals": "6.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^5.0.0"
+  }
+}

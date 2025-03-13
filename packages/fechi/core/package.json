@@ -1,0 +1,19 @@
+{
+  "name": "fechi",
+  "version": "0.0.2",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "release": "release-it"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.4.1",
+  "devDependencies": {
+    "node-fetch": "^3.3.2",
+    "typescript": "~5.7.2",
+    "vite": "^6.2.0",
+    "release-it": "18.1.2"
+  }
+}

@@ -3,14 +3,16 @@
         <div v-if="sidebarState.value" class="w-[75%] h-screen bg-white fixed z-3">
             <LLMHeader type="sidebar" />
             <div class="w-full p-3 border-solid border-b border-[var(--divided-line)] flex">
-                <RouterLink to="/chat" @click="cancelOpen" class="w-[50%] h-[70px] bg-[var(--background-gray)] border-transparent hover:border-[var(--primary-color)] border-solid border-[2px] transition-colors cursor-pointer mr-2 rounded-md flex flex-col p-2.5 justify-between">
+                <RouterLink to="/chat" @click="cancelOpen"
+                            class="w-[50%] h-[70px] bg-[var(--background-gray)] border-transparent hover:border-[var(--primary-color)] border-solid border-[2px] transition-colors cursor-pointer mr-2 rounded-md flex flex-col p-2.5 justify-between">
                     <SvgIcon name="message-circle" :scale="1.5" />
                     <div class="flex justify-between items-center">
                         <span class="font-bold text-sm">开始聊天</span>
                         <SvgIcon name="chevron-right" :scale="1.5" />
                     </div>
                 </RouterLink>
-                <RouterLink to="/create" @click="cancelOpen" class="w-[50%] h-[70px] bg-[var(--background-gray)] border-transparent hover:border-[var(--primary-color)] border-solid border-[2px] transition-colors cursor-pointer rounded-md flex flex-col p-2.5 justify-between">
+                <RouterLink to="/create" @click="cancelOpen"
+                            class="w-[50%] h-[70px] bg-[var(--background-gray)] border-transparent hover:border-[var(--primary-color)] border-solid border-[2px] transition-colors cursor-pointer rounded-md flex flex-col p-2.5 justify-between">
                     <SvgIcon name="robot-plus" :scale="1.5" />
                     <div class="flex justify-between items-center">
                         <span class="font-bold text-sm">创建机器人</span>
@@ -30,19 +32,37 @@
     </transition>
     <div class="w-[300px] h-screen bg-white hidden lg:block border-solid border-r border-[var(--divided-line)]">
         <LLMHeader type="sidebar" />
-        <div class="w-full p-3 border-solid border-b border-[var(--divided-line)] flex">
-            <RouterLink to="/chat" class="w-[50%] h-[70px] bg-[var(--background-gray)] border-transparent hover:border-[var(--primary-color)] border-solid border-[2px] transition-colors cursor-pointer mr-2 rounded-md flex flex-col p-2.5 justify-between">
+        <div class="w-full p-3 border-solid border-b border-[var(--divided-line)] grid grid-cols-2 gap-2">
+            <RouterLink to="/chat"
+                        class="h-[70px] bg-[var(--background-gray)] border-transparent hover:border-[var(--primary-color)] border-solid border-[2px] transition-colors cursor-pointer rounded-md flex flex-col p-2.5 justify-between">
                 <SvgIcon name="message-circle" :scale="1.5" />
                 <div class="flex justify-between items-center">
                     <span class="font-bold text-sm">开始聊天</span>
                     <SvgIcon name="chevron-right" :scale="1.5" />
                 </div>
             </RouterLink>
-            <RouterLink to="/create" class="w-[50%] h-[70px] bg-[var(--background-gray)] border-transparent hover:border-[var(--primary-color)] border-solid border-[2px] transition-colors cursor-pointer rounded-md flex flex-col p-2.5 justify-between">
+            <RouterLink to="/create"
+                        class="h-[70px] bg-[var(--background-gray)] border-transparent hover:border-[var(--primary-color)] border-solid border-[2px] transition-colors cursor-pointer rounded-md flex flex-col p-2.5 justify-between">
                 <SvgIcon name="robot-plus" :scale="1.5" />
                 <div class="flex justify-between items-center">
                     <span class="font-bold text-sm">创建机器人</span>
                     <SvgIcon name="plus" :scale="1.5" />
+                </div>
+            </RouterLink>
+            <RouterLink to="/3d" @click="cancelOpen"
+                        class="h-[70px] bg-[var(--background-gray)] border-transparent hover:border-[var(--primary-color)] border-solid border-[2px] transition-colors cursor-pointer rounded-md flex flex-col p-2.5 justify-between">
+                <SvgIcon name="three-js" :scale="1.5" />
+                <div class="flex justify-between items-center">
+                    <span class="font-bold text-sm">3D测试田</span>
+                    <SvgIcon name="chevron-right" :scale="1.5" />
+                </div>
+            </RouterLink>
+            <RouterLink to="/live2d" @click="cancelOpen"
+                        class="h-[70px] bg-[var(--background-gray)] border-transparent hover:border-[var(--primary-color)] border-solid border-[2px] transition-colors cursor-pointer rounded-md flex flex-col p-2.5 justify-between">
+                <SvgIcon name="three-js" :scale="1.5" />
+                <div class="flex justify-between items-center">
+                    <span class="font-bold text-sm">Live 2D</span>
+                    <SvgIcon name="chevron-right" :scale="1.5" />
                 </div>
             </RouterLink>
         </div>
@@ -88,6 +108,7 @@ const changeAssistant = (id: string) => {
 .slide-leave-to {
     transform: translateX(-100%);
 }
+
 .overlay-enter-active,
 .overlay-leave-active {
     transition: all 0.3s ease-in-out;

@@ -12,6 +12,8 @@ import Pudhing from "pudhing-ui";
 import "pudhing-ui/dist/index.css";
 
 import { db } from "./db/createDatabase";
+
+
 db.open()
     .catch((arr) => {
         alert('数据库连接失败'+arr);

@@ -20,6 +20,14 @@ export const constantRoute = [
                 path: 'create',
                 component: () => import('@/views/MainCreateAssistantPage.vue'),
             },
+            {
+                path: '3d',
+                component: () => import('@/views/ThreeTest.vue'),
+            },
+            {
+                path: 'live2d',
+                component: () => import('@/views/Live2dTest.vue'),
+            },
         ],
     },
     {

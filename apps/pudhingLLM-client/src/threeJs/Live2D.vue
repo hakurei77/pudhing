@@ -48,7 +48,7 @@ const initLive2D = async () => {
     });
 
     // 加载 Live2D 模型，明确类型
-    live2dModel = await Live2DModel.from('/src/assets/ariu/ariu.model3.json');
+    live2dModel = await Live2DModel.from('/ariu/ariu.model3.json');
     app.stage.addChild(live2dModel);
 
     // 设置模型锚点和缩放
